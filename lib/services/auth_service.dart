@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:moolah/models/app_user_model.dart';
+import 'package:moolah/services/services.dart';
 import 'package:moolah/support/wrapper.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,7 +21,17 @@ class AuthService {
   static Future registerWithEmail(BuildContext context, {required String name, required String email, required String password}) async {
     showCircularProgressOverlay(context);
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+
+      if (userCredential.user == null) return;
+
+      AppUser appUser = AppUser(
+        id: userCredential.user!.uid,
+        name: name,
+      );
+
+      await UserDatabase.create(context, appUser: appUser);
+
       stopCircularProgressOverlay(context);
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
     } on FirebaseAuthException catch (error) {
@@ -54,13 +68,17 @@ class AuthService {
       showErrorDialog(context, "There has been an error with Google Sign In.");
     }
 
-    showCircularProgressOverlay(context);
     try {
       if (credential == null) return;
-      await _auth.signInWithCredential(credential);
-      stopCircularProgressOverlay(context);
+      UserCredential result = await _auth.signInWithCredential(credential);
+
+      AppUser appUser = AppUser(
+        id: result.user!.uid,
+        name: result.user!.displayName!,
+      );
+
+      await UserDatabase.create(context, appUser: appUser);
     } on FirebaseAuthException catch (error) {
-      stopCircularProgressOverlay(context);
       showErrorDialog(context, error.message ?? "There has been an error signing in.");
     }
   }
@@ -98,7 +116,13 @@ class AuthService {
   static Future delete(BuildContext context) async {
     showCircularProgressOverlay(context);
     try {
-      await _auth.currentUser!.delete();
+      User? user = _auth.currentUser;
+      if (user == null) return;
+
+      await UserDatabase.deleteUser(context, id: user.uid);
+
+      await user.delete();
+
       stopCircularProgressOverlay(context);
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
     } on FirebaseAuthException catch (error) {

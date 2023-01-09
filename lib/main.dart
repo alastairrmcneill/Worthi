@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/support/wrapper.dart';
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
         StreamProvider<User?>.value(
           value: AuthService.appUserStream,
           initialData: null,
+        ),
+        ChangeNotifierProvider<UserNotifier>(
+          create: (_) => UserNotifier(),
         ),
       ],
       child: MaterialApp(
