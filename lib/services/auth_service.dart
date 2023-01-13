@@ -17,6 +17,11 @@ class AuthService {
     return _auth.authStateChanges();
   }
 
+  // Get current user id
+  static String? get userId {
+    return _auth.currentUser?.uid;
+  }
+
   // Register
   static Future registerWithEmail(BuildContext context, {required String name, required String email, required String password}) async {
     showCircularProgressOverlay(context);

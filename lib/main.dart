@@ -29,6 +29,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<UserNotifier>(
           create: (_) => UserNotifier(),
         ),
+        ChangeNotifierProvider<AccountNotifier>(
+          create: (_) => AccountNotifier(),
+        ),
       ],
       child: MaterialApp(
         title: 'Moolah',

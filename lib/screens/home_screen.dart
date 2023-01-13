@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:moolah/notifiers/user_notifier.dart';
+import 'package:moolah/models/models.dart';
+import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/services.dart';
 import 'package:provider/provider.dart';
 
@@ -21,28 +20,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future _loadData() async {
     await UserDatabase.getCurrentUser(context);
+    await AccountDatabase.readAllAccounts(context);
   }
 
   @override
   Widget build(BuildContext context) {
     UserNotifier userNotifier = Provider.of<UserNotifier>(context);
+    AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context);
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(userNotifier.currentUser?.name ?? ''),
+            accountNotifier.myAccounts == null
+                ? Text("Loading")
+                : Column(
+                    children: [
+                      ...accountNotifier.myAccounts!.map(
+                        (e) {
+                          return Text(e.name);
+                        },
+                      ).toList(),
+                    ],
+                  ),
             ElevatedButton(
-              child: Text('Sign out'),
+              child: Text('Create'),
               onPressed: () async {
-                await AuthService.signOut(context);
-              },
-            ),
-            ElevatedButton(
-              child: Text('Delete'),
-              onPressed: () async {
-                await AuthService.delete(context);
+                await AccountDatabase.create(context, account: Account(name: 'Trading212', type: 'Invest', deposited: 500, value: 500, date: DateTime(2023, 1, 13), history: []));
               },
             ),
           ],
