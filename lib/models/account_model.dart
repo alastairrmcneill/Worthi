@@ -5,18 +5,12 @@ class Account {
   final String? id;
   final String name;
   final String type;
-  final int? deposited;
-  final int value;
-  final DateTime date;
   final List<dynamic> history;
 
   Account({
     this.id,
     required this.name,
     required this.type,
-    required this.deposited,
-    required this.value,
-    required this.date,
     required this.history,
   });
 
@@ -26,9 +20,6 @@ class Account {
       AccountFields.id: id,
       AccountFields.name: name,
       AccountFields.type: type,
-      AccountFields.deposited: deposited,
-      AccountFields.value: value,
-      AccountFields.date: date,
       AccountFields.history: history,
     };
   }
@@ -39,9 +30,6 @@ class Account {
       id: json[AccountFields.id] as String?,
       name: json[AppUserFields.name] as String,
       type: json[AccountFields.type] as String,
-      deposited: json[AccountFields.deposited] as int?,
-      value: json[AccountFields.value] as int,
-      date: (json[AccountFields.date] as Timestamp).toDate(),
       history: json[AccountFields.history] as List<dynamic>,
     );
   }
@@ -51,8 +39,8 @@ class Account {
     String? id,
     String? name,
     String? type,
-    int? deposited,
-    int? value,
+    double? deposited,
+    double? value,
     DateTime? date,
     List<Map<String, Object>>? history,
   }) {
@@ -60,11 +48,27 @@ class Account {
       id: id ?? this.id,
       name: name ?? this.name,
       type: type ?? this.type,
-      deposited: deposited ?? this.deposited,
-      value: value ?? this.value,
-      date: date ?? this.date,
       history: history ?? this.history,
     );
+  }
+
+  updateBalance({required DateTime date, required double? deposited, required double value}) {
+    Map<String, Object?> update = {
+      AccountFields.date: date,
+      AccountFields.deposited: deposited,
+      AccountFields.value: value,
+    };
+    for (var i = 0; i < history.length; i++) {
+      if (date.isAfter((history[i][AccountFields.date] as Timestamp).toDate())) {
+        history.insert(i, update);
+        break;
+      } else {
+        if (i == history.length - 1) {
+          history.insert(i + 1, update);
+          break;
+        }
+      }
+    }
   }
 }
 
@@ -76,4 +80,12 @@ class AccountFields {
   static String date = 'date';
   static String history = 'history';
   static String type = 'type';
+}
+
+class AccountTypes {
+  static String bank = 'Bank';
+  static String investment = 'Investment';
+  static String loan = 'Loan';
+  static String credit = 'Credit card';
+  static String pension = 'Pension';
 }

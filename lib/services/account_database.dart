@@ -70,7 +70,7 @@ class AccountDatabase {
     }
 
     try {
-      CollectionReference ref = _usersRef.doc(userId).collection('accounts');
+      Query ref = _usersRef.doc(userId).collection('accounts').orderBy(AccountFields.name, descending: false);
 
       QuerySnapshot querySnapshot = await ref.get();
 
