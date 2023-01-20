@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moolah/models/models.dart';
 import 'package:moolah/notifiers/notifiers.dart';
@@ -27,7 +28,12 @@ class HistoryListTile extends StatelessWidget {
       child: Container(
         color: Colors.purple,
         height: 100,
-        child: Text("entry" + index.toString()),
+        child: Column(
+          children: [
+            Text(entry[AccountFields.date].toString()),
+            Text(entry[AccountFields.value].toString()),
+          ],
+        ),
       ),
     );
   }

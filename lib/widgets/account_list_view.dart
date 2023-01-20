@@ -15,7 +15,11 @@ class AccountListView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text("Accounts"),
+        Row(
+          children: const [
+            Text("Accounts"),
+          ],
+        ),
         accountNotifier.filteredAccounts == null
             ? const CircularProgressIndicator()
             : accountNotifier.filteredAccounts!.isEmpty

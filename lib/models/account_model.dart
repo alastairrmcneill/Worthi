@@ -69,6 +69,9 @@ class Account {
         }
       }
     }
+    if (history.isEmpty) {
+      history.insert(0, update);
+    }
   }
 }
 
@@ -83,9 +86,18 @@ class AccountFields {
 }
 
 class AccountTypes {
+  static String all = 'All';
   static String bank = 'Bank';
   static String investment = 'Investment';
   static String loan = 'Loan';
   static String credit = 'Credit card';
   static String pension = 'Pension';
+}
+
+/// Sample time series data type.
+class TimeSeriesTotals {
+  final DateTime time;
+  final double total;
+
+  TimeSeriesTotals(this.time, this.total);
 }

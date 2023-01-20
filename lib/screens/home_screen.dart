@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moolah/models/account_model.dart';
-import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/services.dart';
 import 'package:moolah/widgets/widgets.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,7 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: const CustomRightDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showAddAccountDialog(context),
         child: const Icon(Icons.add),
@@ -35,11 +35,34 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Filter(),
-              TimelineChart(),
-              AccountListView(),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 24),
+                  const AccountTypeFilter(),
+                  IconButton(
+                      onPressed: () {
+                        _scaffoldKey.currentState?.openEndDrawer();
+                      },
+                      icon: const Icon(Icons.menu, size: 24)),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    TotalValue(),
+                  ],
+                ),
+              ),
+              const Chart(),
+              const Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: AccountListView(),
+              ),
             ],
           ),
         ),
