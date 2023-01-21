@@ -87,7 +87,7 @@ class AccountFields {
 
 class AccountTypes {
   static String all = 'All';
-  static String bank = 'Bank';
+  static String bank = 'Current Account';
   static String investment = 'Investment';
   static String loan = 'Loan';
   static String credit = 'Credit card';

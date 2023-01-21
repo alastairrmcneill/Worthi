@@ -63,6 +63,7 @@ class Chart extends StatelessWidget {
           data: dataValues,
           domainFn: (TimeSeriesTotals totals, _) => totals.time,
           measureFn: (TimeSeriesTotals totals, _) => totals.total,
+          seriesColor: const Color(r: 4, g: 166, b: 223),
         ),
       ];
     } else {
@@ -72,12 +73,15 @@ class Chart extends StatelessWidget {
           data: dataValues,
           domainFn: (TimeSeriesTotals totals, _) => totals.time,
           measureFn: (TimeSeriesTotals totals, _) => totals.total,
+          seriesColor: const Color(r: 4, g: 166, b: 223),
         ),
         Series<TimeSeriesTotals, DateTime>(
           id: 'Deposited',
           data: dataDeposits,
           domainFn: (TimeSeriesTotals totals, _) => totals.time,
           measureFn: (TimeSeriesTotals totals, _) => totals.total,
+          seriesColor: ColorUtil.fromDartColor(Colors.grey),
+          dashPatternFn: (datum, index) => [2, 2],
         ),
       ];
     }
@@ -95,12 +99,33 @@ class Chart extends StatelessWidget {
                 _buildData(accountNotifier),
                 animate: true,
                 domainAxis: const DateTimeAxisSpec(
+                  renderSpec: SmallTickRendererSpec(
+                    labelStyle: TextStyleSpec(
+                      color: Color(r: 224, g: 231, b: 255),
+                    ),
+                    lineStyle: LineStyleSpec(
+                      color: Color(r: 224, g: 231, b: 255),
+                    ),
+                  ),
                   tickFormatterSpec: AutoDateTimeTickFormatterSpec(
                     month: TimeFormatterSpec(format: 'MMM', transitionFormat: 'MMM yy'),
                   ),
                 ),
                 primaryMeasureAxis: NumericAxisSpec(
                   tickFormatterSpec: BasicNumericTickFormatterSpec.fromNumberFormat(NumberFormat.compact()),
+                  renderSpec: const SmallTickRendererSpec(
+                    labelStyle: TextStyleSpec(
+                      color: Color(r: 224, g: 231, b: 255),
+                    ),
+                    lineStyle: LineStyleSpec(
+                      color: Color(r: 224, g: 231, b: 255),
+                    ),
+                  ),
+                ),
+                defaultRenderer: LineRendererConfig(
+                  strokeWidthPx: 1,
+                  includeArea: true,
+                  areaOpacity: 0.05,
                 ),
                 behaviors: accountNotifier.filter == AccountTypes.investment ? [SeriesLegend()] : [],
               ),

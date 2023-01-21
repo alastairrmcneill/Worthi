@@ -6,16 +6,19 @@ import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/support/wrapper.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final prefs = await SharedPreferences.getInstance();
 
-  runApp(const MyApp());
+  runApp(MyApp(prefs: prefs));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final SharedPreferences prefs;
+  const MyApp({Key? key, required this.prefs}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -32,9 +35,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<AccountNotifier>(
           create: (_) => AccountNotifier(),
         ),
+        ChangeNotifierProvider<SettingsNotifier>(
+          create: (_) => SettingsNotifier(
+            currency: prefs.getString('currency') ?? '£',
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Moolah',
+        debugShowCheckedModeBanner: false,
         theme: MyThemes.theme,
         home: const Wrapper(),
       ),

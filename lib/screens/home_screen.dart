@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(width: 24),
+                  const SizedBox(width: 75),
                   const AccountTypeFilter(),
                   IconButton(
                       onPressed: () {
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
+                  children: [
                     TotalValue(),
                   ],
                 ),

@@ -803,6 +803,9 @@ PODS:
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
   - PromisesObjC (2.1.1)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
@@ -812,6 +815,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
 
 SPEC REPOS:
   trunk:
@@ -853,6 +857,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
@@ -884,6 +890,7 @@ SPEC CHECKSUMS:
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
+  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
 
 PODFILE CHECKSUM: e6d50a93a5af65ffbd940fcee6d59db2ad73b2ec
 

@@ -9,26 +9,36 @@ class AccountTypeFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context);
-    return Container(
-      child: DropdownButton(
-        alignment: AlignmentDirectional.center,
-        underline: const SizedBox(),
-        value: accountNotifier.filter ?? AccountTypes.all,
-        items: [
-          DropdownMenuItem<String>(value: AccountTypes.all, child: Text(AccountTypes.all)),
-          DropdownMenuItem<String>(value: AccountTypes.bank, child: Text(AccountTypes.bank)),
-          DropdownMenuItem<String>(value: AccountTypes.credit, child: Text(AccountTypes.credit)),
-          DropdownMenuItem<String>(value: AccountTypes.investment, child: Text(AccountTypes.investment)),
-          DropdownMenuItem<String>(value: AccountTypes.loan, child: Text(AccountTypes.loan)),
-          DropdownMenuItem<String>(value: AccountTypes.pension, child: Text(AccountTypes.pension)),
+
+    List<PopupMenuItem<String>> items = [
+      PopupMenuItem(value: AccountTypes.all, child: Text(AccountTypes.all, style: const TextStyle(color: Color(0xFF363844)))),
+      PopupMenuItem(value: AccountTypes.bank, child: Text(AccountTypes.bank, style: const TextStyle(color: Color(0xFF363844)))),
+      PopupMenuItem(value: AccountTypes.credit, child: Text(AccountTypes.credit, style: const TextStyle(color: Color(0xFF363844)))),
+      PopupMenuItem(value: AccountTypes.investment, child: Text(AccountTypes.investment, style: const TextStyle(color: Color(0xFF363844)))),
+      PopupMenuItem(value: AccountTypes.loan, child: Text(AccountTypes.loan, style: const TextStyle(color: Color(0xFF363844)))),
+      PopupMenuItem(value: AccountTypes.pension, child: Text(AccountTypes.pension, style: const TextStyle(color: Color(0xFF363844)))),
+    ];
+    return PopupMenuButton(
+      itemBuilder: (context) => items,
+      onSelected: (value) {
+        if (value == AccountTypes.all) {
+          accountNotifier.setFilter = null;
+          return;
+        }
+        accountNotifier.setFilter = value as String;
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            accountNotifier.filter ?? AccountTypes.all,
+            style: const TextStyle(fontSize: 20, color: Color(0xFFE1E7FF)),
+          ),
+          const Icon(
+            Icons.arrow_drop_down,
+            size: 28,
+          ),
         ],
-        onChanged: (value) {
-          if (value == AccountTypes.all) {
-            accountNotifier.setFilter = null;
-            return;
-          }
-          accountNotifier.setFilter = value as String;
-        },
       ),
     );
   }

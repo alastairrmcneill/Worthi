@@ -45,6 +45,7 @@ dependencies:
   fl_chart: ^0.55.2
   charts_flutter: ^0.12.0
   awesome_notifications: ^0.7.4+1
+  shared_preferences: ^2.0.17
 
 dev_dependencies:
   flutter_test:
