@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moolah/models/models.dart';
 import 'package:moolah/services/services.dart';
+import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 
 showAddEntryDialog(BuildContext context, Account account) {
@@ -289,7 +290,7 @@ showTwoButtonDialog(BuildContext context, String text, String option1, AsyncCall
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.red)),
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(MyColors.redAccent)),
               onPressed: () async {
                 Navigator.of(context, rootNavigator: true).pop();
                 function1();

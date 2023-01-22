@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:moolah/models/models.dart';
 import 'package:moolah/services/account_database.dart';
+import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 
 showAddAccountDialog(BuildContext context) {
@@ -15,6 +16,7 @@ showAddAccountDialog(BuildContext context) {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? _type = null;
   bool showDeposited = false;
+
   AlertDialog dialog = AlertDialog(
     scrollable: true,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -30,7 +32,7 @@ showAddAccountDialog(BuildContext context) {
             children: [
               Text(
                 'Create a new account to track',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6!.copyWith(color: MyColors.background),
               ),
               const SizedBox(height: 20),
               Form(
@@ -43,11 +45,11 @@ showAddAccountDialog(BuildContext context) {
                       hint: Text("Type"),
                       value: _type,
                       items: [
-                        DropdownMenuItem<String>(value: AccountTypes.bank, child: Text(AccountTypes.bank)),
-                        DropdownMenuItem<String>(value: AccountTypes.credit, child: Text(AccountTypes.credit)),
-                        DropdownMenuItem<String>(value: AccountTypes.investment, child: Text(AccountTypes.investment)),
-                        DropdownMenuItem<String>(value: AccountTypes.loan, child: Text(AccountTypes.loan)),
-                        DropdownMenuItem<String>(value: AccountTypes.pension, child: Text(AccountTypes.pension)),
+                        DropdownMenuItem<String>(value: AccountTypes.bank, child: Text(AccountTypes.bank, style: const TextStyle(color: MyColors.background))),
+                        DropdownMenuItem<String>(value: AccountTypes.credit, child: Text(AccountTypes.credit, style: const TextStyle(color: MyColors.background))),
+                        DropdownMenuItem<String>(value: AccountTypes.investment, child: Text(AccountTypes.investment, style: const TextStyle(color: MyColors.background))),
+                        DropdownMenuItem<String>(value: AccountTypes.loan, child: Text(AccountTypes.loan, style: const TextStyle(color: MyColors.background))),
+                        DropdownMenuItem<String>(value: AccountTypes.pension, child: Text(AccountTypes.pension, style: const TextStyle(color: MyColors.background))),
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -68,6 +70,7 @@ showAddAccountDialog(BuildContext context) {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _dateController,
+                      style: const TextStyle(color: MyColors.background),
                       decoration: const InputDecoration(
                         hintText: 'Date',
                       ),
@@ -101,28 +104,31 @@ showAddAccountDialog(BuildContext context) {
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (!_formKey.currentState!.validate()) {
-                    return;
-                  }
-                  _formKey.currentState!.save();
-                  await AccountDatabase.create(
-                    context,
-                    account: Account(
-                      name: _nameController.text.trim(),
-                      type: _type!,
-                      history: [
-                        {
-                          AccountFields.date: _date,
-                          AccountFields.deposited: _type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
-                          AccountFields.value: double.parse(_balanceController.text.trim()),
-                        },
-                      ],
-                    ),
-                  ).whenComplete(() => Navigator.pop(context));
-                },
-                child: Text('Create'),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+                    _formKey.currentState!.save();
+                    await AccountDatabase.create(
+                      context,
+                      account: Account(
+                        name: _nameController.text.trim(),
+                        type: _type!,
+                        history: [
+                          {
+                            AccountFields.date: _date,
+                            AccountFields.deposited: _type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
+                            AccountFields.value: double.parse(_balanceController.text.trim()),
+                          },
+                        ],
+                      ),
+                    ).whenComplete(() => Navigator.pop(context));
+                  },
+                  child: const Text('Create'),
+                ),
               )
             ],
           ),

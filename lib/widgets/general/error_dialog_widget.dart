@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moolah/support/theme.dart';
 
 showErrorDialog(BuildContext context, String errorMessage) {
   Dialog alert = Dialog(
@@ -20,7 +21,7 @@ showErrorDialog(BuildContext context, String errorMessage) {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.red)),
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(MyColors.redAccent)),
               onPressed: () async {
                 // Navigator.pop(context);
                 Navigator.of(context, rootNavigator: true).pop();

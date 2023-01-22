@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/models/models.dart';
 import 'package:moolah/notifiers/notifiers.dart';
+import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -118,7 +119,7 @@ class TotalValue extends StatelessWidget {
                       Text(
                         returns[0] == '-' ? '-${settingsNotifier.currency}${returns.substring(1)}' : '${settingsNotifier.currency}$returns',
                         style: TextStyle(
-                          color: returns[0] == '-' ? Colors.red : Colors.green,
+                          color: returns[0] == '-' ? MyColors.redAccent : MyColors.greenAccent,
                           fontSize: 18,
                           fontWeight: FontWeight.w400,
                         ),

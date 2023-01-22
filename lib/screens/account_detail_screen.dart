@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moolah/models/models.dart';
 import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/account_database.dart';
 import 'package:moolah/widgets/widgets.dart';
@@ -10,16 +11,33 @@ class AccountDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context, listen: true);
+    Account account = accountNotifier.currentAccount!;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: false,
+        title: Text(
+          account.name,
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
+        ),
         actions: [
           PopupMenuButton(
             icon: Icon(Icons.more_vert_rounded),
             onSelected: (value) async {
               if (value == MenuItems.item1) {
-                showEditNameDialog(context, accountNotifier.currentAccount!);
+                showEditNameDialog(context, account);
               } else if (value == MenuItems.item2) {
-                await AccountDatabase.deleteAccount(context, id: accountNotifier.currentAccount!.id!).whenComplete(() => Navigator.pop(context));
+                showTwoButtonDialog(
+                  context,
+                  'Are you sure you want to remove this account?',
+                  'Delete',
+                  () async {
+                    await AccountDatabase.deleteAccount(context, id: account.id!).whenComplete(() => Navigator.pop(context));
+                  },
+                  'Cancel',
+                  () {},
+                );
               }
             },
             itemBuilder: (context) => const [
@@ -38,16 +56,20 @@ class AccountDetailScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const Expanded(
+            Expanded(
               flex: 1,
-              child: HistoryListView(),
+              child: Container(), //HistoryListView(),
             ),
-            ElevatedButton(
-              onPressed: () {
-                showAddEntryDialog(context, accountNotifier.currentAccount!);
-              },
-              child: const Text('Add Entry'),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * .6,
+              child: ElevatedButton(
+                onPressed: () {
+                  showAddEntryDialog(context, account);
+                },
+                child: const Text('Add Entry'),
+              ),
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),

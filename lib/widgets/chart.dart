@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:moolah/models/account_model.dart';
 import 'package:moolah/notifiers/notifiers.dart';
+import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -63,7 +64,7 @@ class Chart extends StatelessWidget {
           data: dataValues,
           domainFn: (TimeSeriesTotals totals, _) => totals.time,
           measureFn: (TimeSeriesTotals totals, _) => totals.total,
-          seriesColor: const Color(r: 4, g: 166, b: 223),
+          seriesColor: Color(r: MyColors.background.red, g: MyColors.blueAccent.green, b: MyColors.blueAccent.blue),
         ),
       ];
     } else {
@@ -73,7 +74,7 @@ class Chart extends StatelessWidget {
           data: dataValues,
           domainFn: (TimeSeriesTotals totals, _) => totals.time,
           measureFn: (TimeSeriesTotals totals, _) => totals.total,
-          seriesColor: const Color(r: 4, g: 166, b: 223),
+          seriesColor: Color(r: MyColors.background.red, g: MyColors.blueAccent.green, b: MyColors.blueAccent.blue),
         ),
         Series<TimeSeriesTotals, DateTime>(
           id: 'Deposited',
@@ -98,13 +99,13 @@ class Chart extends StatelessWidget {
               child: TimeSeriesChart(
                 _buildData(accountNotifier),
                 animate: true,
-                domainAxis: const DateTimeAxisSpec(
+                domainAxis: DateTimeAxisSpec(
                   renderSpec: SmallTickRendererSpec(
                     labelStyle: TextStyleSpec(
-                      color: Color(r: 224, g: 231, b: 255),
+                      color: Color(r: MyColors.lightAccent.red, g: MyColors.lightAccent.green, b: MyColors.lightAccent.blue),
                     ),
                     lineStyle: LineStyleSpec(
-                      color: Color(r: 224, g: 231, b: 255),
+                      color: Color(r: MyColors.lightAccent.red, g: MyColors.lightAccent.green, b: MyColors.lightAccent.blue),
                     ),
                   ),
                   tickFormatterSpec: AutoDateTimeTickFormatterSpec(
@@ -113,12 +114,12 @@ class Chart extends StatelessWidget {
                 ),
                 primaryMeasureAxis: NumericAxisSpec(
                   tickFormatterSpec: BasicNumericTickFormatterSpec.fromNumberFormat(NumberFormat.compact()),
-                  renderSpec: const SmallTickRendererSpec(
+                  renderSpec: SmallTickRendererSpec(
                     labelStyle: TextStyleSpec(
-                      color: Color(r: 224, g: 231, b: 255),
+                      color: Color(r: MyColors.lightAccent.red, g: MyColors.lightAccent.green, b: MyColors.lightAccent.blue),
                     ),
                     lineStyle: LineStyleSpec(
-                      color: Color(r: 224, g: 231, b: 255),
+                      color: Color(r: MyColors.lightAccent.red, g: MyColors.lightAccent.green, b: MyColors.lightAccent.blue),
                     ),
                   ),
                 ),

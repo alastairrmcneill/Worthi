@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 
 class TextInputField extends StatelessWidget {
@@ -9,6 +10,7 @@ class TextInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: const TextStyle(color: MyColors.background),
       controller: textEditingController,
       decoration: InputDecoration(
         hintText: hintText,

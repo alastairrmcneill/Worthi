@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/notifiers/notifiers.dart';
+import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 
 class CurrencyDropDown extends StatelessWidget {
@@ -9,8 +10,7 @@ class CurrencyDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     SettingsNotifier settingsNotifier = Provider.of<SettingsNotifier>(context);
     return DropdownButton<String>(
-      dropdownColor: const Color(0xFFE1E7FF),
-      iconEnabledColor: const Color(0xFFE1E7FF),
+      iconEnabledColor: MyColors.lightAccent,
       value: settingsNotifier.currency,
       items: currencyList
           .map(
@@ -18,7 +18,7 @@ class CurrencyDropDown extends StatelessWidget {
               value: currency,
               child: Text(
                 currency,
-                style: TextStyle(fontSize: 22, color: Theme.of(context).scaffoldBackgroundColor),
+                style: const TextStyle(fontSize: 22, color: MyColors.background),
               ),
             ),
           )
