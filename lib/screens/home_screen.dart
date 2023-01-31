@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,9 +16,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey addAccountKey = GlobalKey();
+  final GlobalKey filterAccountsKey = GlobalKey();
   @override
   void initState() {
     _loadData();
+
     super.initState();
   }
 
@@ -24,9 +32,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+    late SharedPreferences preferences;
+
+    displayShowcase() async {
+      preferences = await SharedPreferences.getInstance();
+      bool show = preferences.getBool("showHomePageShowcase") ?? true;
+      if (show) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => ShowCaseWidget.of(context).startShowCase([
+            addAccountKey,
+            filterAccountsKey,
+          ]),
+        );
+      }
+    }
+
+    displayShowcase();
+
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       endDrawer: const CustomRightDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -38,10 +64,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(width: 75),
-                  const AccountTypeFilter(),
+                  Showcase(
+                    key: filterAccountsKey,
+                    description: 'Then filter for the type you want to show.',
+                    child: const AccountTypeFilter(),
+                  ),
                   IconButton(
                       onPressed: () {
-                        _scaffoldKey.currentState?.openEndDrawer();
+                        scaffoldKey.currentState?.openEndDrawer();
                       },
                       icon: const Icon(Icons.menu, size: 24)),
                 ],
@@ -62,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: MyColors.darkAccent,
               ),
               const Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: AccountListView(),
               ),
               Container(
@@ -71,11 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: MyColors.darkAccent,
               ),
               const SizedBox(height: 10),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * .6,
-                child: ElevatedButton(
-                  onPressed: () => showAddAccountDialog(context),
-                  child: const Text('Add Account'),
+              Showcase(
+                key: addAccountKey,
+                description: 'Start by adding an account.',
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * .6,
+                  child: ElevatedButton(
+                    onPressed: () => showAddAccountDialog(context),
+                    child: const Text('Add Account'),
+                  ),
                 ),
               )
             ],

@@ -7,6 +7,7 @@ import 'package:moolah/support/theme.dart';
 import 'package:moolah/support/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,12 @@ class MyApp extends StatelessWidget {
         title: 'Moolah',
         debugShowCheckedModeBanner: false,
         theme: MyThemes.theme,
-        home: const Wrapper(),
+        home: ShowCaseWidget(
+          builder: Builder(builder: (_) => const Wrapper()),
+          onFinish: () {
+            prefs.setBool('showHomePageShowcase', false);
+          },
+        ),
       ),
     );
   }

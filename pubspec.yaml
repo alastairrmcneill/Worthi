@@ -47,6 +47,7 @@ dependencies:
   awesome_notifications: ^0.7.4+1
   shared_preferences: ^2.0.17
   flutter_slidable: ^2.0.0
+  showcaseview: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:
