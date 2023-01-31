@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moolah/models/models.dart';
 import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/account_database.dart';
+import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -11,12 +12,13 @@ class AccountDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context, listen: true);
+    if (accountNotifier.currentAccount == null) return const Center(child: CircularProgressIndicator());
+
     Account account = accountNotifier.currentAccount!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        centerTitle: false,
         title: Text(
           account.name,
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
@@ -33,7 +35,8 @@ class AccountDetailScreen extends StatelessWidget {
                   'Are you sure you want to remove this account?',
                   'Delete',
                   () async {
-                    await AccountDatabase.deleteAccount(context, id: account.id!).whenComplete(() => Navigator.pop(context));
+                    Navigator.pop(context);
+                    await AccountDatabase.deleteAccount(context, id: account.id!);
                   },
                   'Cancel',
                   () {},
@@ -43,34 +46,50 @@ class AccountDetailScreen extends StatelessWidget {
             itemBuilder: (context) => const [
               PopupMenuItem(
                 value: MenuItems.item1,
-                child: Text('Edit'),
+                child: Text('Edit', style: const TextStyle(color: Color(0xFF363844))),
               ),
               PopupMenuItem(
                 value: MenuItems.item2,
-                child: Text('Delete'),
+                child: Text('Delete', style: const TextStyle(color: Color(0xFF363844))),
               ),
             ],
           ),
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(), //HistoryListView(),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * .6,
-              child: ElevatedButton(
-                onPressed: () {
-                  showAddEntryDialog(context, account);
-                },
-                child: const Text('Add Entry'),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const AccountSummary(),
+              Container(
+                height: 10,
+                width: double.infinity,
+                color: MyColors.darkAccent,
               ),
-            ),
-            const SizedBox(height: 10),
-          ],
+              const Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: AccountHistoryListView(),
+              ),
+              Container(
+                height: 10,
+                width: double.infinity,
+                color: MyColors.darkAccent,
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * .6,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showAddEntryDialog(context, account);
+                  },
+                  child: const Text('Add Entry'),
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );

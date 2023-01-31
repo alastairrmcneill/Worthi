@@ -5,7 +5,7 @@ class MyThemes {
   static ThemeData get theme {
     return ThemeData(
       scaffoldBackgroundColor: MyColors.background,
-      appBarTheme: const AppBarTheme(color: MyColors.blueAccent),
+      appBarTheme: const AppBarTheme(color: MyColors.blueAccent, foregroundColor: MyColors.lightAccent, centerTitle: true),
       textTheme: const TextTheme(
         headline1: TextStyle(color: MyColors.lightAccent),
         headline2: TextStyle(color: MyColors.lightAccent),
@@ -72,6 +72,7 @@ class MyColors {
   static const Color background = Color(0xFF363844);
   static const Color darkAccent = Color.fromARGB(255, 47, 48, 62);
   static const Color lightAccent = Color.fromARGB(255, 225, 231, 255);
+  static const Color lightAccentDarker = Color.fromARGB(255, 184, 186, 194);
   static const Color blueAccent = Color(0xFF3C99D9);
   static const Color redAccent = Color.fromARGB(255, 210, 64, 58);
   static const Color greenAccent = Colors.green;

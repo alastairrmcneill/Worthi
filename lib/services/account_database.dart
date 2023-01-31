@@ -94,11 +94,11 @@ class AccountDatabase {
     try {
       DocumentReference ref = _usersRef.doc(userId).collection('accounts').doc(newAccount.id!);
       await ref.update(newAccount.toJSON());
+      await readAllAccounts(context);
+      await readAccount(context, id: newAccount.id!);
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);
     }
-    await readAllAccounts(context);
-    await readAccount(context, id: newAccount.id!);
   }
 
   // Delete account

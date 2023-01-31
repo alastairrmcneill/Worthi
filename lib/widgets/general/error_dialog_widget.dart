@@ -16,6 +16,7 @@ showErrorDialog(BuildContext context, String errorMessage) {
           Text(
             errorMessage,
             textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headline6!.copyWith(color: MyColors.background),
           ),
           const SizedBox(height: 10),
           SizedBox(
@@ -23,7 +24,6 @@ showErrorDialog(BuildContext context, String errorMessage) {
             child: ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(MyColors.redAccent)),
               onPressed: () async {
-                // Navigator.pop(context);
                 Navigator.of(context, rootNavigator: true).pop();
               },
               child: Text('OK'),

@@ -131,7 +131,7 @@ showEditEntryDialog(BuildContext context, Account account, int index) {
             children: [
               Text(
                 'Edit Entry',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6!.copyWith(color: MyColors.darkAccent),
               ),
               const SizedBox(height: 20),
               Form(
@@ -144,6 +144,7 @@ showEditEntryDialog(BuildContext context, Account account, int index) {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _dateController,
+                      style: const TextStyle(color: MyColors.background),
                       readOnly: true,
                       onTap: () async {
                         _pickedStartDate = await showDatePicker(
@@ -181,7 +182,7 @@ showEditEntryDialog(BuildContext context, Account account, int index) {
                   }
                   _formKey.currentState!.save();
                   account.history[index] = {
-                    AccountFields.date: _date,
+                    AccountFields.date: Timestamp.fromDate(_date),
                     AccountFields.deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
                     AccountFields.value: double.parse(_balanceController.text.trim()),
                   };
@@ -226,7 +227,7 @@ showEditNameDialog(BuildContext context, Account account) {
             children: [
               Text(
                 'Edit Name',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6!.copyWith(color: MyColors.background),
               ),
               const SizedBox(height: 20),
               Form(
@@ -284,7 +285,7 @@ showTwoButtonDialog(BuildContext context, String text, String option1, AsyncCall
             text,
             textAlign: TextAlign.center,
             maxLines: 4,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.headline6!.copyWith(color: MyColors.background),
           ),
           const SizedBox(height: 10),
           SizedBox(
