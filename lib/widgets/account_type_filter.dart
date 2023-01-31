@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/models/account_model.dart';
 import 'package:moolah/notifiers/notifiers.dart';
+import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 class AccountTypeFilter extends StatelessWidget {
   const AccountTypeFilter({super.key});
 
+  void _showMultiSelect(BuildContext context, AccountNotifier accountNotifier) async {
+    final List<String> items = AccountTypes.allTypes();
+
+    final List<String>? results = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MultiSelect(
+          items: items,
+          preSelectedItems: accountNotifier.filter,
+        );
+      },
+    );
+
+    // Update UI
+    if (results != null) {
+      accountNotifier.setFilter = results;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context);
-
-    List<PopupMenuItem<String>> items = [
-      PopupMenuItem(value: AccountTypes.all, child: Text(AccountTypes.all, style: const TextStyle(color: Color(0xFF363844)))),
-      PopupMenuItem(value: AccountTypes.bank, child: Text(AccountTypes.bank, style: const TextStyle(color: Color(0xFF363844)))),
-      PopupMenuItem(value: AccountTypes.credit, child: Text(AccountTypes.credit, style: const TextStyle(color: Color(0xFF363844)))),
-      PopupMenuItem(value: AccountTypes.investment, child: Text(AccountTypes.investment, style: const TextStyle(color: Color(0xFF363844)))),
-      PopupMenuItem(value: AccountTypes.loan, child: Text(AccountTypes.loan, style: const TextStyle(color: Color(0xFF363844)))),
-      PopupMenuItem(value: AccountTypes.pension, child: Text(AccountTypes.pension, style: const TextStyle(color: Color(0xFF363844)))),
-    ];
-    return PopupMenuButton(
-      itemBuilder: (context) => items,
-      onSelected: (value) {
-        if (value == AccountTypes.all) {
-          accountNotifier.setFilter = null;
-          return;
-        }
-        accountNotifier.setFilter = value as String;
+    return GestureDetector(
+      onTap: () {
+        _showMultiSelect(context, accountNotifier);
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            accountNotifier.filter ?? AccountTypes.all,
-            style: const TextStyle(fontSize: 20, color: Color(0xFFE1E7FF)),
-          ),
-          const Icon(
-            Icons.arrow_drop_down,
-            size: 28,
-          ),
-        ],
-      ),
+      child: Row(children: [
+        Text(
+          accountNotifier.filter.isEmpty || accountNotifier.filter.length == 5 ? 'All' : '${accountNotifier.filter.length} selected',
+          style: const TextStyle(fontSize: 20),
+        ),
+        const Icon(
+          Icons.arrow_drop_down,
+          size: 28,
+        ),
+      ]),
     );
   }
 }

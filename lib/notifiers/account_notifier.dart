@@ -3,13 +3,13 @@ import 'package:moolah/models/models.dart';
 
 class AccountNotifier extends ChangeNotifier {
   List<Account>? _myAccounts;
-  String? _filter;
+  List<String> _filter = [];
   List<Account>? _filteredAccounts;
   Account? _currentAccount;
 
   List<Account>? get myAccounts => _myAccounts;
   List<Account>? get filteredAccounts => _filteredAccounts;
-  String? get filter => _filter;
+  List<String> get filter => _filter;
   Account? get currentAccount => _currentAccount;
 
   set setMyAccounts(List<Account>? myAccounts) {
@@ -23,12 +23,12 @@ class AccountNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setFilter(String? type) {
+  set setFilter(List<String> type) {
     _filter = type;
-    if (_filter == null) {
+    if (_filter.isEmpty) {
       _filteredAccounts = _myAccounts;
     } else if (_filter != null && _myAccounts != null) {
-      _filteredAccounts = _myAccounts!.where((account) => account.type == _filter).toList();
+      _filteredAccounts = _myAccounts!.where((account) => _filter.contains(account.type)).toList();
     }
     notifyListeners();
   }

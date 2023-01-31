@@ -47,13 +47,16 @@ class MyThemes {
       inputDecorationTheme: InputDecorationTheme(
         fillColor: Colors.white,
         filled: true,
+        prefixIconColor: MyColors.blueAccent,
+        suffixIconColor: MyColors.blueAccent,
+        // labelStyle: TextStyle(color: MyColors.greenAccent),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.grey[500]!),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Colors.blue),
+          borderSide: const BorderSide(color: MyColors.blueAccent),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),

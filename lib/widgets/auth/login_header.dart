@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moolah/support/theme.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({Key? key}) : super(key: key);
@@ -13,8 +14,11 @@ class LoginHeader extends StatelessWidget {
           const SizedBox(height: 15),
           CircleAvatar(
             radius: 60,
-            backgroundColor: Colors.red,
-            // child: Image.asset('assets/images/plant_logo.png'),
+            backgroundColor: Colors.transparent,
+            child: Image.asset(
+              "lib/icons/logo.png",
+              color: MyColors.blueAccent,
+            ),
           ),
           const SizedBox(height: 35),
           Text(

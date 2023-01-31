@@ -81,53 +81,55 @@ class TotalValue extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        accountNotifier.filter == AccountTypes.investment
-            ? Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        accountNotifier.filter.length == 1
+            ? accountNotifier.filter[0] == AccountTypes.investment
+                ? Row(
                     children: [
-                      Text(
-                        'Invested',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xFFE1E7FF).withOpacity(0.8),
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Invested',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFFE1E7FF).withOpacity(0.8),
+                            ),
+                          ),
+                          Text(
+                            '${settingsNotifier.currency}$invested',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '${settingsNotifier.currency}$invested',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
+                      const SizedBox(width: 15),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Returns',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFFE1E7FF).withOpacity(0.8),
+                            ),
+                          ),
+                          Text(
+                            returns[0] == '-' ? '-${settingsNotifier.currency}${returns.substring(1)}' : '${settingsNotifier.currency}$returns',
+                            style: TextStyle(
+                              color: returns[0] == '-' ? MyColors.redAccent : MyColors.greenAccent,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
-                  ),
-                  const SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Returns',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: const Color(0xFFE1E7FF).withOpacity(0.8),
-                        ),
-                      ),
-                      Text(
-                        returns[0] == '-' ? '-${settingsNotifier.currency}${returns.substring(1)}' : '${settingsNotifier.currency}$returns',
-                        style: TextStyle(
-                          color: returns[0] == '-' ? MyColors.redAccent : MyColors.greenAccent,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )
+                  )
+                : const SizedBox()
             : const SizedBox()
       ],
     );

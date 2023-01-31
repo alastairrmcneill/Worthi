@@ -86,12 +86,21 @@ class AccountFields {
 }
 
 class AccountTypes {
-  static String all = 'All';
   static String bank = 'Current Account';
   static String investment = 'Investment';
   static String loan = 'Loan';
   static String credit = 'Credit card';
   static String pension = 'Pension';
+
+  static List<String> allTypes() {
+    return [
+      bank,
+      investment,
+      loan,
+      credit,
+      pension,
+    ];
+  }
 }
 
 /// Sample time series data type.

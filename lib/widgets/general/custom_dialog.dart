@@ -31,7 +31,7 @@ showAddEntryDialog(BuildContext context, Account account) {
             children: [
               Text(
                 'Add Entry',
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.headline6!.copyWith(color: MyColors.darkAccent),
               ),
               const SizedBox(height: 20),
               Form(
@@ -44,6 +44,7 @@ showAddEntryDialog(BuildContext context, Account account) {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _dateController,
+                      style: const TextStyle(color: MyColors.background),
                       readOnly: true,
                       onTap: () async {
                         _pickedStartDate = await showDatePicker(
@@ -74,24 +75,27 @@ showAddEntryDialog(BuildContext context, Account account) {
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (!_formKey.currentState!.validate()) {
-                    return;
-                  }
-                  _formKey.currentState!.save();
-                  account.updateBalance(
-                    date: _date,
-                    deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
-                    value: double.parse(_balanceController.text.trim()),
-                  );
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+                    _formKey.currentState!.save();
+                    account.updateBalance(
+                      date: _date,
+                      deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
+                      value: double.parse(_balanceController.text.trim()),
+                    );
 
-                  await AccountDatabase.updateAccount(
-                    context,
-                    newAccount: account,
-                  ).whenComplete(() => Navigator.pop(context));
-                },
-                child: Text('Add'),
+                    await AccountDatabase.updateAccount(
+                      context,
+                      newAccount: account,
+                    ).whenComplete(() => Navigator.pop(context));
+                  },
+                  child: Text('Add'),
+                ),
               )
             ],
           ),
@@ -175,24 +179,27 @@ showEditEntryDialog(BuildContext context, Account account, int index) {
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  if (!_formKey.currentState!.validate()) {
-                    return;
-                  }
-                  _formKey.currentState!.save();
-                  account.history[index] = {
-                    AccountFields.date: Timestamp.fromDate(_date),
-                    AccountFields.deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
-                    AccountFields.value: double.parse(_balanceController.text.trim()),
-                  };
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (!_formKey.currentState!.validate()) {
+                      return;
+                    }
+                    _formKey.currentState!.save();
+                    account.history[index] = {
+                      AccountFields.date: Timestamp.fromDate(_date),
+                      AccountFields.deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
+                      AccountFields.value: double.parse(_balanceController.text.trim()),
+                    };
 
-                  await AccountDatabase.updateAccount(
-                    context,
-                    newAccount: account,
-                  ).whenComplete(() => Navigator.pop(context));
-                },
-                child: Text('Confirm'),
+                    await AccountDatabase.updateAccount(
+                      context,
+                      newAccount: account,
+                    ).whenComplete(() => Navigator.pop(context));
+                  },
+                  child: Text('Confirm'),
+                ),
               )
             ],
           ),
@@ -236,20 +243,23 @@ showEditNameDialog(BuildContext context, Account account) {
                   children: [
                     TextInputField(textEditingController: _nameController, hintText: 'Name'),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        _formKey.currentState!.save();
-                        Account newAccount = account.copy(name: _nameController.text.trim());
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          _formKey.currentState!.save();
+                          Account newAccount = account.copy(name: _nameController.text.trim());
 
-                        await AccountDatabase.updateAccount(
-                          context,
-                          newAccount: newAccount,
-                        ).whenComplete(() => Navigator.pop(context));
-                      },
-                      child: Text('Update'),
+                          await AccountDatabase.updateAccount(
+                            context,
+                            newAccount: newAccount,
+                          ).whenComplete(() => Navigator.pop(context));
+                        },
+                        child: Text('Update'),
+                      ),
                     )
                   ],
                 ),
@@ -291,7 +301,7 @@ showTwoButtonDialog(BuildContext context, String text, String option1, AsyncCall
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(MyColors.redAccent)),
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color?>(Colors.red)),
               onPressed: () async {
                 Navigator.of(context, rootNavigator: true).pop();
                 function1();
