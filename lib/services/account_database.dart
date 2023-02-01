@@ -95,7 +95,8 @@ class AccountDatabase {
       DocumentReference ref = _usersRef.doc(userId).collection('accounts').doc(newAccount.id!);
       await ref.update(newAccount.toJSON());
       await readAllAccounts(context);
-      await readAccount(context, id: newAccount.id!);
+
+      // await readAccount(context, id: newAccount.id!);
     } on FirebaseException catch (error) {
       showErrorDialog(context, error.message!);
     }

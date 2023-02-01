@@ -52,14 +52,14 @@ class Account {
     );
   }
 
-  updateBalance({required DateTime date, required double? deposited, required double value}) {
+  updateBalance({required Timestamp date, required double? deposited, required double value}) {
     Map<String, Object?> update = {
       AccountFields.date: date,
       AccountFields.deposited: deposited,
       AccountFields.value: value,
     };
     for (var i = 0; i < history.length; i++) {
-      if (date.isAfter((history[i][AccountFields.date] as Timestamp).toDate())) {
+      if (date.toDate().isAfter((history[i][AccountFields.date] as Timestamp).toDate())) {
         history.insert(i, update);
         break;
       } else {

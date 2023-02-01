@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.moolah">
    <application
-        android:label="Finance Master 3000"
+        android:label="Worthi"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

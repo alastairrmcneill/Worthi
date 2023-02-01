@@ -22,8 +22,8 @@ class LoginHeader extends StatelessWidget {
           ),
           const SizedBox(height: 35),
           Text(
-            'Welcome to Finance Master 3000!',
-            style: Theme.of(context).textTheme.headline5,
+            'Worthi',
+            style: Theme.of(context).textTheme.headline5!.copyWith(fontSize: 30),
           ),
           const SizedBox(height: 5),
           Text(

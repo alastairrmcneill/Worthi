@@ -23,7 +23,7 @@ class TotalValue extends StatelessWidget {
   }
 
   String _buildInvested(AccountNotifier accountNotifier) {
-    if (accountNotifier.filter != AccountTypes.investment) return "0.00";
+    if (!accountNotifier.filter.contains(AccountTypes.investment) || accountNotifier.filter.length > 1) return "0.00";
     List<Account> accounts = accountNotifier.filteredAccounts!;
     double runningTotal = 0;
 
@@ -35,7 +35,7 @@ class TotalValue extends StatelessWidget {
   }
 
   String _buildReturns(AccountNotifier accountNotifier) {
-    if (accountNotifier.filter != AccountTypes.investment) return "0.00";
+    if (!accountNotifier.filter.contains(AccountTypes.investment) || accountNotifier.filter.length > 1) return "0.00";
     List<Account> accounts = accountNotifier.filteredAccounts!;
     double runningTotalDepostied = 0;
     double runningTotalValue = 0;
@@ -68,17 +68,9 @@ class TotalValue extends StatelessWidget {
             fontWeight: FontWeight.w300,
           ),
         ),
-        RichText(
-          text: TextSpan(
-            text: settingsNotifier.currency,
-            style: const TextStyle(fontSize: 18, color: Color(0xFFE1E7FF)),
-            children: [
-              TextSpan(
-                text: total,
-                style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w300, color: Color(0xFFE1E7FF)),
-              ),
-            ],
-          ),
+        Text(
+          total[0] == '-' ? ' -${settingsNotifier.currency}${total.substring(1)}' : '${settingsNotifier.currency}$total',
+          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
         ),
         const SizedBox(height: 10),
         accountNotifier.filter.length == 1

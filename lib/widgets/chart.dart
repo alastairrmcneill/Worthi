@@ -57,17 +57,7 @@ class Chart extends StatelessWidget {
       dataDeposits.add(TimeSeriesTotals(date, deposit));
     }
 
-    if (accountNotifier.filter != AccountTypes.investment) {
-      return [
-        Series<TimeSeriesTotals, DateTime>(
-          id: 'Value',
-          data: dataValues,
-          domainFn: (TimeSeriesTotals totals, _) => totals.time,
-          measureFn: (TimeSeriesTotals totals, _) => totals.total,
-          seriesColor: Color(r: MyColors.background.red, g: MyColors.blueAccent.green, b: MyColors.blueAccent.blue),
-        ),
-      ];
-    } else {
+    if (accountNotifier.filter.length == 1 && accountNotifier.filter.contains(AccountTypes.investment)) {
       return [
         Series<TimeSeriesTotals, DateTime>(
           id: 'Value',
@@ -83,6 +73,16 @@ class Chart extends StatelessWidget {
           measureFn: (TimeSeriesTotals totals, _) => totals.total,
           seriesColor: ColorUtil.fromDartColor(Colors.grey),
           dashPatternFn: (datum, index) => [2, 2],
+        ),
+      ];
+    } else {
+      return [
+        Series<TimeSeriesTotals, DateTime>(
+          id: 'Value',
+          data: dataValues,
+          domainFn: (TimeSeriesTotals totals, _) => totals.time,
+          measureFn: (TimeSeriesTotals totals, _) => totals.total,
+          seriesColor: Color(r: MyColors.background.red, g: MyColors.blueAccent.green, b: MyColors.blueAccent.blue),
         ),
       ];
     }
@@ -128,7 +128,7 @@ class Chart extends StatelessWidget {
                   includeArea: true,
                   areaOpacity: 0.05,
                 ),
-                behaviors: accountNotifier.filter == AccountTypes.investment ? [SeriesLegend()] : [],
+                behaviors: (accountNotifier.filter.length == 1 && accountNotifier.filter.contains(AccountTypes.investment)) ? [SeriesLegend()] : [],
               ),
             )
           : const Center(child: CircularProgressIndicator()),

@@ -84,7 +84,7 @@ showAddEntryDialog(BuildContext context, Account account) {
                     }
                     _formKey.currentState!.save();
                     account.updateBalance(
-                      date: _date,
+                      date: Timestamp.fromDate(_date),
                       deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
                       value: double.parse(_balanceController.text.trim()),
                     );
