@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moolah/support/theme.dart';
 
 class EmailFormField extends StatelessWidget {
   final TextEditingController textEditingController;
@@ -7,6 +8,7 @@ class EmailFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: const TextStyle(color: MyColors.background),
       decoration: const InputDecoration(
         labelText: 'Email',
         prefixIcon: Icon(Icons.email_outlined),

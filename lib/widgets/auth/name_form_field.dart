@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moolah/support/theme.dart';
 
 class NameFormField extends StatelessWidget {
   final TextEditingController textEditingController;
@@ -8,6 +9,7 @@ class NameFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: textEditingController,
+      style: const TextStyle(color: MyColors.background),
       decoration: const InputDecoration(
         hintText: 'Name',
         prefixIcon: Icon(Icons.person_outline_rounded),

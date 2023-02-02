@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moolah/support/theme.dart';
 
 class PasswordFormField extends StatefulWidget {
   final TextEditingController textEditingController;
@@ -14,6 +15,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: const TextStyle(color: MyColors.background),
       decoration: InputDecoration(
         labelText: 'Password',
         prefixIcon: const Icon(Icons.lock_outline),
