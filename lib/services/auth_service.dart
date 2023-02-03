@@ -7,6 +7,7 @@ import 'package:moolah/services/services.dart';
 import 'package:moolah/support/wrapper.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthService {
   static FirebaseAuth _auth = FirebaseAuth.instance;
@@ -85,6 +86,36 @@ class AuthService {
       await UserDatabase.create(context, appUser: appUser);
     } on FirebaseAuthException catch (error) {
       showErrorDialog(context, error.message ?? "There has been an error signing in.");
+    }
+  }
+
+  // Apple sign in
+  static Future signInWithApple(BuildContext context) async {
+    try {
+      final appleIdCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      final OAuthProvider oAuthProvider = OAuthProvider('apple.com');
+      OAuthCredential credential = oAuthProvider.credential(
+        idToken: appleIdCredential.identityToken,
+        accessToken: appleIdCredential.authorizationCode,
+      );
+
+      UserCredential result = await _auth.signInWithCredential(credential);
+
+      AppUser appUser = AppUser(
+        id: result.user!.uid,
+        name: '${appleIdCredential.givenName} ${appleIdCredential.familyName}',
+      );
+
+      await UserDatabase.create(context, appUser: appUser);
+    } on FirebaseAuthException catch (error) {
+      showErrorDialog(context, error.message ?? "There has been an error signing in.");
+    } on Exception catch (_) {
+      showErrorDialog(context, "There has been an error with Apple Sign In.");
     }
   }
 

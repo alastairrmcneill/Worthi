@@ -12,6 +12,7 @@ class EmailFormField extends StatelessWidget {
       decoration: const InputDecoration(
         labelText: 'Email',
         prefixIcon: Icon(Icons.email_outlined),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
       ),
       textInputAction: TextInputAction.next,
       maxLines: 1,

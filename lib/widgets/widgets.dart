@@ -13,6 +13,7 @@ export 'auth/email_form_field.dart';
 export 'auth/name_form_field.dart';
 export 'auth/password_form_field.dart';
 export 'auth/register_button.dart';
+export 'auth/apple_sign_in_button.dart';
 export 'chart.dart';
 export 'account_list_tile.dart';
 export 'account_list_view.dart';

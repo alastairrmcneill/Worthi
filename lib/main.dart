@@ -8,6 +8,7 @@ import 'package:moolah/support/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

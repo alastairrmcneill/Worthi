@@ -13,6 +13,7 @@ class NameFormField extends StatelessWidget {
       decoration: const InputDecoration(
         hintText: 'Name',
         prefixIcon: Icon(Icons.person_outline_rounded),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
       ),
       maxLines: 1,
       keyboardType: TextInputType.name,

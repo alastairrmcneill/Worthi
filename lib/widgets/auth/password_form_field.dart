@@ -18,6 +18,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       style: const TextStyle(color: MyColors.background),
       decoration: InputDecoration(
         labelText: 'Password',
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         prefixIcon: const Icon(Icons.lock_outline),
         suffixIcon: IconButton(
           onPressed: () {

@@ -11,6 +11,7 @@ class TextInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       style: const TextStyle(color: MyColors.background),
+      textCapitalization: TextCapitalization.words,
       controller: textEditingController,
       decoration: InputDecoration(
         hintText: hintText,
