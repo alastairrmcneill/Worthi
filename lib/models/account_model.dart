@@ -75,7 +75,6 @@ class Account {
   }
 
   sortHistory() {
-    print('Sorting');
     history.sort((a, b) => (b[AccountFields.date] as Timestamp).toDate().compareTo((a[AccountFields.date] as Timestamp).toDate()));
   }
 }
