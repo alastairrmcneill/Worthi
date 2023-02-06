@@ -22,6 +22,8 @@ class AccountListTile extends StatelessWidget {
 
     String returnsString = formatCurrency.format(totalValue - totalDepostied);
     String percentString = (((totalValue - totalDepostied) / totalDepostied) * 100).toStringAsFixed(2);
+    if (percentString == 'NaN') percentString = '0';
+
     return '$returnsString ($percentString%)';
   }
 

@@ -88,6 +88,7 @@ showAddEntryDialog(BuildContext context, Account account) {
                       deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
                       value: double.parse(_balanceController.text.trim()),
                     );
+                    account.sortHistory();
 
                     await AccountDatabase.updateAccount(
                       context,
@@ -153,7 +154,7 @@ showEditEntryDialog(BuildContext context, Account account, int index) {
                       onTap: () async {
                         _pickedStartDate = await showDatePicker(
                           context: context,
-                          initialDate: DateTime.now(),
+                          initialDate: (account.history[index][AccountFields.date] as Timestamp).toDate(),
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2100),
                         );
@@ -192,7 +193,7 @@ showEditEntryDialog(BuildContext context, Account account, int index) {
                       AccountFields.deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
                       AccountFields.value: double.parse(_balanceController.text.trim()),
                     };
-
+                    account.sortHistory();
                     await AccountDatabase.updateAccount(
                       context,
                       newAccount: account,
