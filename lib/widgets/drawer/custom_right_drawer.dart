@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:moolah/services/auth_service.dart';
+import 'package:moolah/screens/screens.dart';
+import 'package:moolah/services/services.dart';
+import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 
 class CustomRightDrawer extends StatelessWidget {
@@ -23,6 +25,25 @@ class CustomRightDrawer extends StatelessWidget {
                   ),
                   CurrencyDropDown(),
                 ],
+              ),
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
+              ListTile(
+                contentPadding: EdgeInsets.all(0),
+                title: const Text(
+                  'Archived Accounts',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                trailing: const Icon(
+                  Icons.chevron_right_rounded,
+                  size: 30,
+                  color: MyColors.lightAccent,
+                ),
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ArchivedAccountsScreen())),
               ),
               const SizedBox(height: 10),
               const Divider(),

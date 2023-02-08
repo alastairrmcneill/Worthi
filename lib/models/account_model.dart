@@ -5,12 +5,14 @@ class Account {
   final String? id;
   final String name;
   final String type;
+  final bool archived;
   final List<dynamic> history;
 
   Account({
     this.id,
     required this.name,
     required this.type,
+    required this.archived,
     required this.history,
   });
 
@@ -20,6 +22,7 @@ class Account {
       AccountFields.id: id,
       AccountFields.name: name,
       AccountFields.type: type,
+      AccountFields.archived: archived,
       AccountFields.history: history,
     };
   }
@@ -30,6 +33,7 @@ class Account {
       id: json[AccountFields.id] as String?,
       name: json[AppUserFields.name] as String,
       type: json[AccountFields.type] as String,
+      archived: json[AccountFields.archived] as bool? ?? false,
       history: json[AccountFields.history] as List<dynamic>,
     );
   }
@@ -39,15 +43,14 @@ class Account {
     String? id,
     String? name,
     String? type,
-    double? deposited,
-    double? value,
-    DateTime? date,
+    bool? archived,
     List<Map<String, Object>>? history,
   }) {
     return Account(
       id: id ?? this.id,
       name: name ?? this.name,
       type: type ?? this.type,
+      archived: archived ?? this.archived,
       history: history ?? this.history,
     );
   }
@@ -87,6 +90,7 @@ class AccountFields {
   static String date = 'date';
   static String history = 'history';
   static String type = 'type';
+  static String archived = 'archived';
 }
 
 class AccountTypes {

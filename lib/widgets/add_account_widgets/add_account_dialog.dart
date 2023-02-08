@@ -117,6 +117,7 @@ showAddAccountDialog(BuildContext context) {
                       account: Account(
                         name: _nameController.text.trim(),
                         type: _type!,
+                        archived: false,
                         history: [
                           {
                             AccountFields.date: _date,

@@ -16,7 +16,7 @@ class Chart extends StatelessWidget {
     sf.DateTimeIntervalType intervalType = sf.DateTimeIntervalType.auto;
     double interval = 0;
 
-    List<Account> accounts = accountNotifier.filteredAccounts!;
+    List<Account> accounts = accountNotifier.filteredAccounts ?? [];
     List<List<dynamic>> accountsHistory = [];
     DateTime? endDate;
     DateTime? startDate;
@@ -113,8 +113,10 @@ class Chart extends StatelessWidget {
     DisplayNotifier displayNotifier = Provider.of<DisplayNotifier>(context, listen: false);
     sf.SplineType splineType = sf.SplineType.monotonic;
     late Map<String, Object>? chartData;
-    if (accountNotifier.filteredAccounts != null && accountNotifier.filteredAccounts!.isNotEmpty) {
-      chartData = _buildChartData(accountNotifier);
+    if (accountNotifier.filteredAccounts != null) {
+      if (accountNotifier.filteredAccounts!.isNotEmpty) {
+        chartData = _buildChartData(accountNotifier);
+      }
     }
 
     return Container(
@@ -140,10 +142,10 @@ class Chart extends StatelessWidget {
                       }
 
                       if (series.name == 'Value') {
-                        displayNotifier.setValue = (chartData!["chartValueData"] as List<ChartData>)[args.chartPointInfo.dataPointIndex ?? 0].y;
+                        displayNotifier.setValue = (chartData?["chartValueData"] as List<ChartData>)[args.chartPointInfo.dataPointIndex ?? 0].y;
                       }
                       if (series.name == 'Deposited') {
-                        displayNotifier.setDeposited = (chartData!["chartDepositData"] as List<ChartData>)[args.chartPointInfo.dataPointIndex ?? 0].y;
+                        displayNotifier.setDeposited = (chartData?["chartDepositData"] as List<ChartData>)[args.chartPointInfo.dataPointIndex ?? 0].y;
                       }
                     },
                     onChartTouchInteractionDown: (tapArgs) {

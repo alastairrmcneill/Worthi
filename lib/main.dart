@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:moolah/notifiers/display_notifier.dart';
 import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
@@ -9,7 +8,6 @@ import 'package:moolah/support/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

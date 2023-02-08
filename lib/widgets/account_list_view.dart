@@ -28,13 +28,17 @@ class AccountListView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 15),
-          accountNotifier.filteredAccounts == null
+          accountNotifier.filteredNotArchivedAccounts == null
               ? const SizedBox(height: 50, child: Center(child: CircularProgressIndicator()))
-              : accountNotifier.filteredAccounts!.isEmpty
+              : accountNotifier.filteredNotArchivedAccounts!.isEmpty
                   ? const SizedBox(height: 50, child: Center(child: Text('No accounts.')))
                   : Column(
                       children: [
-                        ...accountNotifier.filteredAccounts!.map((account) => AccountListTile(account: account)).toList(),
+                        ...accountNotifier.filteredNotArchivedAccounts!
+                            .map(
+                              (account) => AccountListTile(account: account),
+                            )
+                            .toList(),
                       ],
                     ),
         ],

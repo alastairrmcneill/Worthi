@@ -5,7 +5,12 @@ class MyThemes {
   static ThemeData get theme {
     return ThemeData(
       scaffoldBackgroundColor: MyColors.background,
-      appBarTheme: const AppBarTheme(color: MyColors.blueAccent, foregroundColor: MyColors.lightAccent, centerTitle: true),
+      appBarTheme: const AppBarTheme(
+        color: Colors.transparent,
+        foregroundColor: MyColors.lightAccent,
+        centerTitle: true,
+        elevation: 0,
+      ),
       textTheme: const TextTheme(
         headline1: TextStyle(color: MyColors.lightAccent),
         headline2: TextStyle(color: MyColors.lightAccent),

@@ -3,6 +3,7 @@ import 'package:moolah/models/models.dart';
 import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/account_database.dart';
 import 'package:moolah/support/theme.dart';
+import 'package:moolah/support/wrapper.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +18,6 @@ class AccountDetailScreen extends StatelessWidget {
     Account account = accountNotifier.currentAccount!;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         title: Text(
           account.name,
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
@@ -28,8 +27,15 @@ class AccountDetailScreen extends StatelessWidget {
             icon: Icon(Icons.more_vert_rounded),
             onSelected: (value) async {
               if (value == MenuItems.item1) {
+                // Edit
                 showEditNameDialog(context, account);
               } else if (value == MenuItems.item2) {
+                // Archive/Restore
+                Account newAccount = account.copy(archived: !account.archived);
+                await AccountDatabase.updateAccount(context, newAccount: newAccount);
+                // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Wrapper()), (_) => false);
+              } else if (value == MenuItems.item3) {
+                // Delete
                 showTwoButtonDialog(
                   context,
                   'Are you sure you want to remove this account?',
@@ -43,14 +49,18 @@ class AccountDetailScreen extends StatelessWidget {
                 );
               }
             },
-            itemBuilder: (context) => const [
-              PopupMenuItem(
+            itemBuilder: (context) => [
+              const PopupMenuItem(
                 value: MenuItems.item1,
-                child: Text('Edit', style: const TextStyle(color: Color(0xFF363844))),
+                child: Text('Edit', style: TextStyle(color: Color(0xFF363844))),
               ),
               PopupMenuItem(
                 value: MenuItems.item2,
-                child: Text('Delete', style: const TextStyle(color: Color(0xFF363844))),
+                child: Text(account.archived ? 'Restore' : 'Archive', style: const TextStyle(color: Color(0xFF363844))),
+              ),
+              const PopupMenuItem(
+                value: MenuItems.item3,
+                child: Text('Delete', style: TextStyle(color: Color(0xFF363844))),
               ),
             ],
           ),
@@ -69,7 +79,7 @@ class AccountDetailScreen extends StatelessWidget {
                 color: MyColors.darkAccent,
               ),
               const Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: AccountHistoryListView(),
               ),
               Container(
