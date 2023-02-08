@@ -6,10 +6,17 @@ import 'package:moolah/support/theme.dart';
 import 'package:moolah/support/wrapper.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 
-class AccountDetailScreen extends StatelessWidget {
+class AccountDetailScreen extends StatefulWidget {
   const AccountDetailScreen({super.key});
 
+  @override
+  State<AccountDetailScreen> createState() => _AccountDetailScreenState();
+}
+
+class _AccountDetailScreenState extends State<AccountDetailScreen> {
   @override
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context, listen: true);
@@ -67,39 +74,43 @@ class AccountDetailScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const AccountSummary(),
-              Container(
-                height: 10,
-                width: double.infinity,
-                color: MyColors.darkAccent,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: AccountHistoryListView(),
-              ),
-              Container(
-                height: 10,
-                width: double.infinity,
-                color: MyColors.darkAccent,
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * .6,
-                child: ElevatedButton(
-                  onPressed: () {
-                    showAddEntryDialog(context, account);
-                  },
-                  child: const Text('Add Entry'),
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const AccountSummary(),
+                    Container(
+                      height: 10,
+                      width: double.infinity,
+                      color: MyColors.darkAccent,
+                    ),
+                    const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: AccountHistoryListView()),
+                    Container(
+                      height: 10,
+                      width: double.infinity,
+                      color: MyColors.darkAccent,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
-            ],
-          ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * .6,
+              child: ElevatedButton(
+                onPressed: () {
+                  showAddEntryDialog(context, account);
+                },
+                child: const Text('Add Entry'),
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
         ),
       ),
     );

@@ -72,82 +72,62 @@ class AccountHistoryListTile extends StatelessWidget {
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
     String valueString = formatCurrency.format(value);
 
-    late SharedPreferences preferences;
-
-    displayShowcase() async {
-      preferences = await SharedPreferences.getInstance();
-      bool show = preferences.getBool("showEditEntryShowcase") ?? true;
-      if (show) {
-        WidgetsBinding.instance.addPostFrameCallback(
-          (_) => ShowCaseWidget.of(context).startShowCase([
-            editEntryKey,
-          ]),
-        );
-      }
-    }
-
-    displayShowcase();
-
-    return Showcase(
-      key: editEntryKey,
-      description: 'Swipe to edit or delete entry.',
-      child: Slidable(
-        endActionPane: ActionPane(
-          motion: const ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (context) {
-                Account account = accountNotifier.currentAccount!;
-                showEditEntryDialog(context, account, index);
-              },
-              backgroundColor: MyColors.greenAccent,
-              foregroundColor: Colors.white,
-              icon: Icons.edit,
-              label: 'Edit',
-            ),
-            SlidableAction(
-              onPressed: (context) async {
-                Account account = accountNotifier.currentAccount!;
-                if (account.history.length == 1) {
-                  showSnackBar(context, 'Cannot delete. Must have at least one entry.');
-                  return;
-                }
-
-                Account newAccount = account.copy();
-
-                newAccount.history.removeAt(index);
-                await AccountDatabase.updateAccount(context, newAccount: newAccount);
-              },
-              backgroundColor: MyColors.redAccent,
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: 'Delete',
-            ),
-          ],
-        ),
-        child: Container(
-          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: MyColors.lightAccent, width: 0.2))),
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    DateFormat('dd/MM/yy').format(date),
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
-                  ),
-                  Text(
-                    valueString[0] == '-' ? ' -${settingsNotifier.currency}${valueString.substring(1)}' : '${settingsNotifier.currency}$valueString',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
-                  ),
-                ],
-              ),
-              _buildReturns(settingsNotifier, accountNotifier.currentAccount!),
-            ],
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: (context) {
+              Account account = accountNotifier.currentAccount!;
+              showEditEntryDialog(context, account, index);
+            },
+            backgroundColor: MyColors.greenAccent,
+            foregroundColor: Colors.white,
+            icon: Icons.edit,
+            label: 'Edit',
           ),
+          SlidableAction(
+            onPressed: (context) async {
+              Account account = accountNotifier.currentAccount!;
+              if (account.history.length == 1) {
+                showSnackBar(context, 'Cannot delete. Must have at least one entry.');
+                return;
+              }
+
+              Account newAccount = account.copy();
+
+              newAccount.history.removeAt(index);
+              await AccountDatabase.updateAccount(context, newAccount: newAccount);
+            },
+            backgroundColor: MyColors.redAccent,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: Container(
+        decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: MyColors.lightAccent, width: 0.2))),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  DateFormat('dd/MM/yy').format(date),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+                ),
+                Text(
+                  valueString[0] == '-' ? ' -${settingsNotifier.currency}${valueString.substring(1)}' : '${settingsNotifier.currency}$valueString',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+                ),
+              ],
+            ),
+            _buildReturns(settingsNotifier, accountNotifier.currentAccount!),
+          ],
         ),
       ),
     );
