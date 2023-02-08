@@ -110,6 +110,7 @@ class Chart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context);
+    DisplayNotifier displayNotifier = Provider.of<DisplayNotifier>(context, listen: false);
     sf.SplineType splineType = sf.SplineType.monotonic;
     late Map<String, Object>? chartData;
     if (accountNotifier.filteredAccounts != null && accountNotifier.filteredAccounts!.isNotEmpty) {
@@ -139,11 +140,20 @@ class Chart extends StatelessWidget {
                       }
 
                       if (series.name == 'Value') {
-                        print(args.chartPointInfo.label.toString());
+                        displayNotifier.setValue = (chartData!["chartValueData"] as List<ChartData>)[args.chartPointInfo.dataPointIndex ?? 0].y;
+                      }
+                      if (series.name == 'Deposited') {
+                        displayNotifier.setDeposited = (chartData!["chartDepositData"] as List<ChartData>)[args.chartPointInfo.dataPointIndex ?? 0].y;
                       }
                     },
+                    onChartTouchInteractionDown: (tapArgs) {
+                      displayNotifier.setShowFromGraph = true;
+                    },
                     onChartTouchInteractionUp: (tapArgs) {
-                      print('released');
+                      displayNotifier.setShowFromGraph = false;
+                    },
+                    onZoomStart: (zoomingArgs) {
+                      displayNotifier.setShowFromGraph = false;
                     },
                     plotAreaBorderWidth: 0,
                     margin: const EdgeInsets.only(left: 0, right: 10),

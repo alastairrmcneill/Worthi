@@ -9,7 +9,7 @@ class TotalValue extends StatelessWidget {
   TotalValue({super.key});
   final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
 
-  String _buildTotal(AccountNotifier accountNotifier) {
+  String _buildTotal(AccountNotifier accountNotifier, DisplayNotifier displayNotifier) {
     if (accountNotifier.filteredAccounts == null) return "0.00";
 
     List<Account> accounts = accountNotifier.filteredAccounts!;
@@ -19,10 +19,15 @@ class TotalValue extends StatelessWidget {
       if (account.history.isEmpty) continue;
       runningTotal += account.history.first[AccountFields.value];
     }
+
+    if (displayNotifier.showFromGraph) {
+      runningTotal = displayNotifier.value;
+    }
+
     return formatCurrency.format(runningTotal);
   }
 
-  String _buildInvested(AccountNotifier accountNotifier) {
+  String _buildInvested(AccountNotifier accountNotifier, DisplayNotifier displayNotifier) {
     if (!accountNotifier.filter.contains(AccountTypes.investment) || accountNotifier.filter.length > 1) return "0.00";
     List<Account> accounts = accountNotifier.filteredAccounts!;
     double runningTotal = 0;
@@ -31,10 +36,15 @@ class TotalValue extends StatelessWidget {
       if (account.history.isEmpty) continue;
       runningTotal += account.history.first[AccountFields.deposited];
     }
+
+    if (displayNotifier.showFromGraph) {
+      runningTotal = displayNotifier.deposited;
+    }
+
     return formatCurrency.format(runningTotal);
   }
 
-  String _buildReturns(AccountNotifier accountNotifier) {
+  String _buildReturns(AccountNotifier accountNotifier, DisplayNotifier displayNotifier) {
     if (!accountNotifier.filter.contains(AccountTypes.investment) || accountNotifier.filter.length > 1) return "0.00";
     List<Account> accounts = accountNotifier.filteredAccounts!;
     double runningTotalDepostied = 0;
@@ -45,6 +55,12 @@ class TotalValue extends StatelessWidget {
       runningTotalDepostied += account.history.first[AccountFields.deposited];
       runningTotalValue += account.history.first[AccountFields.value];
     }
+
+    if (displayNotifier.showFromGraph) {
+      runningTotalValue = displayNotifier.value;
+      runningTotalDepostied = displayNotifier.deposited;
+    }
+
     String returnsString = formatCurrency.format(runningTotalValue - runningTotalDepostied);
     String percentString = (((runningTotalValue - runningTotalDepostied) / runningTotalDepostied) * 100).toStringAsFixed(2);
     return '$returnsString ($percentString%)';
@@ -54,9 +70,11 @@ class TotalValue extends StatelessWidget {
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context);
     SettingsNotifier settingsNotifier = Provider.of<SettingsNotifier>(context);
-    String total = _buildTotal(accountNotifier);
-    String invested = _buildInvested(accountNotifier);
-    String returns = _buildReturns(accountNotifier);
+    DisplayNotifier displayNotifier = Provider.of<DisplayNotifier>(context);
+
+    String total = _buildTotal(accountNotifier, displayNotifier);
+    String invested = _buildInvested(accountNotifier, displayNotifier);
+    String returns = _buildReturns(accountNotifier, displayNotifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

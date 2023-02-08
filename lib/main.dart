@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:moolah/notifiers/display_notifier.dart';
 import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
           create: (_) => SettingsNotifier(
             currency: prefs.getString('currency') ?? '£',
           ),
+        ),
+        ChangeNotifierProvider<DisplayNotifier>(
+          create: (_) => DisplayNotifier(),
         ),
       ],
       child: MaterialApp(
