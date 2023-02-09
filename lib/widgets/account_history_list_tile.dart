@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:moolah/models/models.dart';
 import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/account_database.dart';
+import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -22,12 +23,16 @@ class AccountHistoryListTile extends StatelessWidget {
 
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
 
-    double totalDepostied = account.history[index][AccountFields.deposited] as double;
-    String depositedString = formatCurrency.format(totalDepostied);
-    double totalValue = account.history[index][AccountFields.value] as double;
+    double? totalDeposited = double.tryParse(account.history.first[AccountFields.deposited].toString());
+    totalDeposited ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.deposited] as String);
 
-    String returnsString = formatCurrency.format(totalValue - totalDepostied);
-    String percentString = (((totalValue - totalDepostied) / totalDepostied) * 100).toStringAsFixed(2);
+    String depositedString = formatCurrency.format(totalDeposited);
+
+    double? totalValue = double.tryParse(account.history.first[AccountFields.value].toString());
+    totalValue ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.value] as String);
+
+    String returnsString = formatCurrency.format(totalValue - totalDeposited);
+    String percentString = (((totalValue - totalDeposited) / totalDeposited) * 100).toStringAsFixed(2);
     if (percentString == "NaN") percentString = "0";
     String returns = '$returnsString ($percentString%)';
 
@@ -67,7 +72,9 @@ class AccountHistoryListTile extends StatelessWidget {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context);
     SettingsNotifier settingsNotifier = Provider.of<SettingsNotifier>(context);
     DateTime date = (entry[AccountFields.date] as Timestamp).toDate();
-    double value = entry[AccountFields.value] as double;
+
+    double? value = double.tryParse(entry[AccountFields.value].toString());
+    value ??= EncryptionService.decryptToDouble(entry[AccountFields.value] as String);
 
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
     String valueString = formatCurrency.format(value);

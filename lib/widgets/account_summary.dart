@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moolah/models/account_model.dart';
 import 'package:moolah/notifiers/notifiers.dart';
+import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -12,12 +12,16 @@ class AccountSummary extends StatelessWidget {
   Widget _buildReturns(SettingsNotifier settingsNotifier, Account account) {
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
 
-    double totalDepostied = account.history.first[AccountFields.deposited] as double;
-    String depositedString = formatCurrency.format(totalDepostied);
-    double totalValue = account.history.first[AccountFields.value] as double;
+    double? totalDeposited = double.tryParse(account.history.first[AccountFields.deposited].toString());
+    totalDeposited ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.deposited] as String);
 
-    String returnsString = formatCurrency.format(totalValue - totalDepostied);
-    String percentString = (((totalValue - totalDepostied) / totalDepostied) * 100).toStringAsFixed(2);
+    String depositedString = formatCurrency.format(totalDeposited);
+
+    double? totalValue = double.tryParse(account.history.first[AccountFields.value].toString());
+    totalValue ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.value] as String);
+
+    String returnsString = formatCurrency.format(totalValue - totalDeposited);
+    String percentString = (((totalValue - totalDeposited) / totalDeposited) * 100).toStringAsFixed(2);
     if (percentString == "NaN") percentString = "0";
     String returns = '$returnsString ($percentString%)';
 
@@ -58,7 +62,11 @@ class AccountSummary extends StatelessWidget {
     Account account = accountNotifier.currentAccount!;
 
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
-    String balance = formatCurrency.format(account.history.first[AccountFields.value] as double);
+
+    double? balanceNumber = double.tryParse(account.history.first[AccountFields.value].toString());
+    balanceNumber ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.value] as String);
+
+    String balance = formatCurrency.format(balanceNumber);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),

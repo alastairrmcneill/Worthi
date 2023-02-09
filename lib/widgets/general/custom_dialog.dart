@@ -114,8 +114,20 @@ showAddEntryDialog(BuildContext context, Account account) {
 }
 
 showEditEntryDialog(BuildContext context, Account account, int index) {
-  TextEditingController _depositedController = TextEditingController(text: (account.history[index][AccountFields.deposited] as double?).toString());
-  TextEditingController _balanceController = TextEditingController(text: (account.history[index][AccountFields.value] as double).toString());
+  double? initialDeposited;
+
+  if (account.type != AccountTypes.investment) {
+    initialDeposited = null;
+  } else {
+    initialDeposited = double.tryParse(account.history.first[AccountFields.deposited].toString());
+    initialDeposited ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.deposited] as String);
+  }
+
+  double? initialValue = double.tryParse(account.history.first[AccountFields.value].toString());
+  initialValue ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.value] as String);
+
+  TextEditingController _depositedController = TextEditingController(text: initialDeposited.toString());
+  TextEditingController _balanceController = TextEditingController(text: initialValue.toString());
   TextEditingController _dateController = TextEditingController(text: DateFormat('dd/MM/yyyy').format((account.history[index][AccountFields.date] as Timestamp).toDate()));
   late DateTime _date;
   DateTime? _pickedStartDate;
@@ -193,6 +205,7 @@ showEditEntryDialog(BuildContext context, Account account, int index) {
                       AccountFields.deposited: account.type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
                       AccountFields.value: double.parse(_balanceController.text.trim()),
                     };
+
                     account.sortHistory();
                     await AccountDatabase.updateAccount(
                       context,

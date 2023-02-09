@@ -24,7 +24,9 @@ class AccountDatabase {
 
       Account newAccount = account.copy(id: ref.id);
 
-      await ref.set(newAccount.toJSON());
+      Account encryptedAccount = newAccount.encryptData();
+
+      await ref.set(encryptedAccount.toJSON());
       await readAllAccounts(context);
       stopCircularProgressOverlay(context);
       showSnackBar(context, 'Account added.');
@@ -93,7 +95,9 @@ class AccountDatabase {
     }
     try {
       DocumentReference ref = _usersRef.doc(userId).collection('accounts').doc(newAccount.id!);
-      await ref.update(newAccount.toJSON());
+
+      Account encryptedAccount = newAccount.encryptData();
+      await ref.update(encryptedAccount.toJSON());
       await readAllAccounts(context);
 
       // await readAccount(context, id: newAccount.id!);

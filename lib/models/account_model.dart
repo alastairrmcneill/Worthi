@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moolah/models/app_user_model.dart';
+import 'package:moolah/services/services.dart';
 
 class Account {
   final String? id;
@@ -29,12 +30,38 @@ class Account {
 
   // From JSON
   static Account fromJSON(json) {
+    List<dynamic> history = json[AccountFields.history] as List<dynamic>;
+    List<Map<String, Object?>> convertedHistory = [];
+
+    for (var entry in history) {
+      Map<dynamic, dynamic> mapEntry = entry as Map<dynamic, dynamic>;
+      Map<String, Object?> convertedEntry = {};
+      for (var item in mapEntry.keys) {
+        convertedEntry[item.toString()] = mapEntry[item];
+
+        if (item.toString() == AccountFields.value || item.toString() == AccountFields.deposited) {
+          if (mapEntry[item] is String) {
+            // number in string format
+            double? number = double.tryParse(mapEntry[item] as String);
+
+            // if decrypting needed
+            number ??= EncryptionService.decryptToDouble(mapEntry[item] as String);
+
+            convertedEntry[item.toString()] = number;
+          } else if (mapEntry[item] is int) {
+            convertedEntry[item.toString()] = (mapEntry[item] as int).toDouble();
+          }
+        }
+      }
+      convertedHistory.add(convertedEntry);
+    }
+
     return Account(
       id: json[AccountFields.id] as String?,
       name: json[AppUserFields.name] as String,
       type: json[AccountFields.type] as String,
       archived: json[AccountFields.archived] as bool? ?? false,
-      history: json[AccountFields.history] as List<dynamic>,
+      history: convertedHistory,
     );
   }
 
@@ -44,7 +71,7 @@ class Account {
     String? name,
     String? type,
     bool? archived,
-    List<Map<String, Object>>? history,
+    List<Map<String, Object?>>? history,
   }) {
     return Account(
       id: id ?? this.id,
@@ -79,6 +106,24 @@ class Account {
 
   sortHistory() {
     history.sort((a, b) => (b[AccountFields.date] as Timestamp).toDate().compareTo((a[AccountFields.date] as Timestamp).toDate()));
+  }
+
+  Account encryptData() {
+    List<Map<String, Object?>> encryptedHistory = [];
+    for (var entry in history) {
+      Map<String, Object?> newEntry = entry;
+      if (entry[AccountFields.value] is! String) {
+        newEntry[AccountFields.value] = EncryptionService.encryptDouble(entry[AccountFields.value]);
+      }
+      if (entry[AccountFields.deposited] is! String) {
+        if (entry[AccountFields.deposited] != null) {
+          newEntry[AccountFields.deposited] = EncryptionService.encryptDouble(entry[AccountFields.deposited]);
+        }
+      }
+
+      encryptedHistory.add(entry);
+    }
+    return copy(history: encryptedHistory);
   }
 }
 

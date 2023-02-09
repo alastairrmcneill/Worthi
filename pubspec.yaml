@@ -51,6 +51,7 @@ dependencies:
   showcaseview: ^2.0.0+1
   flutter_launcher_icons: ^0.11.0
   syncfusion_flutter_charts: ^20.4.48
+  encrypt: ^5.0.1
   
 
 dev_dependencies:
