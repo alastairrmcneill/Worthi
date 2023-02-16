@@ -1,16 +1,11 @@
-# moolah
+# Worhi
 
-A new Flutter project.
+A personal finance app desinged to help users keep track of their accounts, understand their investments and have a better plan for the future. 
 
-## Getting Started
+## Technology
 
-This project is a starting point for a Flutter application.
+This project is made using Dart and the Flutter framework. Firebase was used for the user authentication and storing the data.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Links
+Play Store - https://play.google.com/store/apps/details?id=com.alastairmcneill.moolah
+App Store - https://apps.apple.com/app/worthi/id1669290386
