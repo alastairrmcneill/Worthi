@@ -105,10 +105,19 @@ class AuthService {
       );
 
       UserCredential result = await _auth.signInWithCredential(credential);
+      if (result.user!.displayName == null) {
+        await result.user!
+            .updateDisplayName(
+              "${appleIdCredential.givenName ?? ""} ${appleIdCredential.familyName ?? ""}",
+            )
+            .whenComplete(
+              () => result.user!.reload(),
+            );
+      }
 
       AppUser appUser = AppUser(
         id: result.user!.uid,
-        name: '${appleIdCredential.givenName} ${appleIdCredential.familyName}',
+        name: result.user!.displayName!,
       );
 
       await UserDatabase.create(context, appUser: appUser);
