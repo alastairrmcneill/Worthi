@@ -23,13 +23,13 @@ class AccountHistoryListTile extends StatelessWidget {
 
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
 
-    double? totalDeposited = double.tryParse(account.history.first[AccountFields.deposited].toString());
-    totalDeposited ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.deposited] as String);
+    double? totalDeposited = double.tryParse(account.history[index][AccountFields.deposited].toString());
+    totalDeposited ??= EncryptionService.decryptToDouble(account.history[index][AccountFields.deposited] as String);
 
     String depositedString = formatCurrency.format(totalDeposited);
 
-    double? totalValue = double.tryParse(account.history.first[AccountFields.value].toString());
-    totalValue ??= EncryptionService.decryptToDouble(account.history.first[AccountFields.value] as String);
+    double? totalValue = double.tryParse(account.history[index][AccountFields.value].toString());
+    totalValue ??= EncryptionService.decryptToDouble(account.history[index][AccountFields.value] as String);
 
     String returnsString = formatCurrency.format(totalValue - totalDeposited);
     String percentString = (((totalValue - totalDeposited) / totalDeposited) * 100).toStringAsFixed(2);
