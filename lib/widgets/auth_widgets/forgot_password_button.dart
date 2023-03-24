@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/screens/screens.dart';
 
+// Forogt email form field with validation included
 class ForgotPasswordButton extends StatelessWidget {
   const ForgotPasswordButton({Key? key}) : super(key: key);
 

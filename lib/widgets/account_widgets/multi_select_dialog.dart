@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/support/theme.dart';
-import 'package:provider/provider.dart';
 
+// Widget for filter selected dialog
 class MultiSelect extends StatefulWidget {
   final List<String> items;
   final List<String> preSelectedItems;
@@ -17,9 +16,11 @@ class _MultiSelectState extends State<MultiSelect> {
   @override
   void initState() {
     super.initState();
+    // Finding what the currently selected filter is
     _selectedItems = widget.preSelectedItems;
   }
 
+  // When you click on an item
   void _itemChange(String itemValue, bool isSelected) {
     setState(() {
       if (isSelected) {
@@ -30,10 +31,12 @@ class _MultiSelectState extends State<MultiSelect> {
     });
   }
 
+  // Cancel this dialog to remove
   void _cancel() {
     Navigator.pop(context);
   }
 
+  // Submit the form and return the selcted values
   void _submit() {
     Navigator.pop(context, _selectedItems);
   }

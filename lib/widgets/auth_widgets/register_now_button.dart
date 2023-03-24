@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/screens/screens.dart';
 
+// Button to navigate user to the register screen
 class RegisterNowButton extends StatelessWidget {
   const RegisterNowButton({Key? key}) : super(key: key);
 

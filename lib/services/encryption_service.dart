@@ -1,5 +1,6 @@
 import 'package:encrypt/encrypt.dart';
 
+// Ecryption service to encrypy the account data that gets stored in the database
 class EncryptionService {
   static final _key = Key.fromLength(32);
   static final _iv = IV.fromLength(8);

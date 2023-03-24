@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moolah/support/theme.dart';
-import 'package:provider/provider.dart';
 
+// Number input field that has valdiation for numbers
 class NumberInputField extends StatelessWidget {
   final TextEditingController textEditingController;
   final String hintText;

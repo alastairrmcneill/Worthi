@@ -3,21 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:moolah/models/models.dart';
 import 'package:moolah/notifiers/notifiers.dart';
-import 'package:moolah/services/account_database.dart';
 import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
 
+// Tile to display the historical entries in the account details
 class AccountHistoryListTile extends StatelessWidget {
   final int index;
   final Map<String, Object?> entry;
   AccountHistoryListTile({super.key, required this.index, required this.entry});
   GlobalKey editEntryKey = GlobalKey();
 
+  // Build the data for the return
   Widget _buildReturns(SettingsNotifier settingsNotifier, Account account) {
     if (account.type != AccountTypes.investment) return const SizedBox();
 
@@ -79,10 +78,12 @@ class AccountHistoryListTile extends StatelessWidget {
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
     String valueString = formatCurrency.format(value);
 
+    // Swipe across on the tile to carry out actions
     return Slidable(
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
+          // Edit option
           SlidableAction(
             onPressed: (context) {
               Account account = accountNotifier.currentAccount!;
@@ -93,6 +94,7 @@ class AccountHistoryListTile extends StatelessWidget {
             icon: Icons.edit,
             label: 'Edit',
           ),
+          // Delete option
           SlidableAction(
             onPressed: (context) async {
               Account account = accountNotifier.currentAccount!;
@@ -125,11 +127,11 @@ class AccountHistoryListTile extends StatelessWidget {
               children: [
                 Text(
                   DateFormat('dd/MM/yy').format(date),
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
                 ),
                 Text(
                   valueString[0] == '-' ? ' -${settingsNotifier.currency}${valueString.substring(1)}' : '${settingsNotifier.currency}$valueString',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
                 ),
               ],
             ),

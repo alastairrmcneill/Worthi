@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Provider notifier to hold the settings such as what currency to use
 class SettingsNotifier extends ChangeNotifier {
   late SharedPreferences prefs;
   late String _currency;

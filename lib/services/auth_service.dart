@@ -27,6 +27,7 @@ class AuthService {
   static Future registerWithEmail(BuildContext context, {required String name, required String email, required String password}) async {
     showCircularProgressOverlay(context);
     try {
+      // Create user credential in firebase auth
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
       if (userCredential.user == null) return;
@@ -36,9 +37,12 @@ class AuthService {
         name: name,
       );
 
+      // Write this user to the database
       await UserDatabase.create(context, appUser: appUser);
 
       stopCircularProgressOverlay(context);
+
+      // Push back to the wrapper
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
     } on FirebaseAuthException catch (error) {
       stopCircularProgressOverlay(context);
@@ -49,6 +53,8 @@ class AuthService {
   // Sign in
   static Future signInWithEmail(BuildContext context, {required String email, required String password}) async {
     showCircularProgressOverlay(context);
+
+    // Sign in to firebase auth with email and password
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       stopCircularProgressOverlay(context);
@@ -61,6 +67,8 @@ class AuthService {
   // Google sign in
   static Future signInWithGoogle(BuildContext context) async {
     OAuthCredential? credential;
+
+    // Get google sign in credentials
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return;
@@ -74,6 +82,7 @@ class AuthService {
       showErrorDialog(context, "There has been an error with Google Sign In.");
     }
 
+    // Use the google auth to sign in to Firebase Auth
     try {
       if (credential == null) return;
       UserCredential result = await _auth.signInWithCredential(credential);
@@ -83,6 +92,7 @@ class AuthService {
         name: result.user!.displayName!,
       );
 
+      // Write user to database
       await UserDatabase.create(context, appUser: appUser);
     } on FirebaseAuthException catch (error) {
       showErrorDialog(context, error.message ?? "There has been an error signing in.");
@@ -91,6 +101,7 @@ class AuthService {
 
   // Apple sign in
   static Future signInWithApple(BuildContext context) async {
+    // Get apple sign in credentials
     try {
       final appleIdCredential = await SignInWithApple.getAppleIDCredential(
         scopes: [
@@ -104,7 +115,10 @@ class AuthService {
         accessToken: appleIdCredential.authorizationCode,
       );
 
+      // Sign in to Firebase Auth with those credentials
       UserCredential result = await _auth.signInWithCredential(credential);
+
+      // Store correct name to firebase auth
       if (result.user!.displayName == null) {
         await result.user!
             .updateDisplayName(
@@ -120,6 +134,7 @@ class AuthService {
         name: result.user!.displayName!,
       );
 
+      // Write to database
       await UserDatabase.create(context, appUser: appUser);
     } on FirebaseAuthException catch (error) {
       showErrorDialog(context, error.message ?? "There has been an error signing in.");
@@ -132,6 +147,7 @@ class AuthService {
   static Future forgotPassword(BuildContext context, {required String email}) async {
     showCircularProgressOverlay(context);
 
+    // Use firebase auth to trigger password recovery email
     try {
       await _auth.sendPasswordResetEmail(email: email);
       showSnackBar(context, 'Password retreival email sent');
@@ -145,10 +161,13 @@ class AuthService {
   // Sign out
   static Future signOut(BuildContext context) async {
     showCircularProgressOverlay(context);
+
+    // If logged in with google sign in then sign out of google
     if (_googleSignIn.currentUser != null) {
       await _googleSignIn.disconnect();
     }
     try {
+      // Sign out from Firebase Auth
       await _auth.signOut();
       stopCircularProgressOverlay(context);
     } on FirebaseAuthException catch (error) {
@@ -161,14 +180,19 @@ class AuthService {
   static Future delete(BuildContext context) async {
     showCircularProgressOverlay(context);
     try {
+      // Check if someone is logged in
       User? user = _auth.currentUser;
-      if (user == null) return;
+      if (user == null) return; // If not then return
 
+      // Remove user from database
       await UserDatabase.deleteUser(context, id: user.uid);
 
+      // Sign out from firebase auth
       await user.delete();
 
       stopCircularProgressOverlay(context);
+
+      // Push back to wrapper
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Wrapper()), (_) => false);
     } on FirebaseAuthException catch (error) {
       stopCircularProgressOverlay(context);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/support/theme.dart';
 
+// Custom error dialog with string input for any message
 showErrorDialog(BuildContext context, String errorMessage) {
   Dialog alert = Dialog(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),

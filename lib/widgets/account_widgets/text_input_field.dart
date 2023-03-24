@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/support/theme.dart';
-import 'package:provider/provider.dart';
 
+// Custom text input form field with validation
 class TextInputField extends StatelessWidget {
   final TextEditingController textEditingController;
   final String hintText;

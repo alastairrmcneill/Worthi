@@ -6,9 +6,11 @@ import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+// Widget for the top fo the account detail screen
 class AccountSummary extends StatelessWidget {
   const AccountSummary({super.key});
 
+  // Build the widget for returns
   Widget _buildReturns(SettingsNotifier settingsNotifier, Account account) {
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
 

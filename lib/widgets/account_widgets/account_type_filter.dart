@@ -4,9 +4,11 @@ import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
+// Filter for the different types of accounts
 class AccountTypeFilter extends StatelessWidget {
   const AccountTypeFilter({super.key});
 
+  // Show the dialog for selecting multiple
   void _showMultiSelect(BuildContext context, AccountNotifier accountNotifier) async {
     final List<String> items = AccountTypes.allTypes();
 
@@ -31,18 +33,22 @@ class AccountTypeFilter extends StatelessWidget {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context);
     return GestureDetector(
       onTap: () {
+        // Show the dialog box when filter clicked
         _showMultiSelect(context, accountNotifier);
       },
-      child: Row(children: [
-        Text(
-          accountNotifier.filter.isEmpty || accountNotifier.filter.length == 5 ? 'All' : '${accountNotifier.filter.length} selected',
-          style: const TextStyle(fontSize: 20),
-        ),
-        const Icon(
-          Icons.arrow_drop_down,
-          size: 28,
-        ),
-      ]),
+      // Show text and dropdown icon
+      child: Row(
+        children: [
+          Text(
+            accountNotifier.filter.isEmpty || accountNotifier.filter.length == 5 ? 'All' : '${accountNotifier.filter.length} selected',
+            style: const TextStyle(fontSize: 20),
+          ),
+          const Icon(
+            Icons.arrow_drop_down,
+            size: 28,
+          ),
+        ],
+      ),
     );
   }
 }

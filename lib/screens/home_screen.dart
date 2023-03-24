@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
 
@@ -18,24 +15,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey addAccountKey = GlobalKey();
   final GlobalKey filterAccountsKey = GlobalKey();
+
   @override
   void initState() {
-    _loadData();
-
     super.initState();
+
+    // Load data needed for app
+    _loadData();
   }
 
   Future _loadData() async {
+    // Load current user from data from database
     await UserDatabase.getCurrentUser(context);
+
+    // Load the user accounts from the database
     await AccountDatabase.readAllAccounts(context);
   }
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
     late SharedPreferences preferences;
 
+    // Use the showcase package to highlight widgets for user onboarding
     displayShowcase() async {
       preferences = await SharedPreferences.getInstance();
       bool show = preferences.getBool("showHomePageShowcase") ?? true;
@@ -49,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
+    // Call method to show user onboarding
     displayShowcase();
 
     return Scaffold(
@@ -91,20 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     const Chart(),
-                    Container(
-                      height: 10,
-                      width: double.infinity,
-                      color: MyColors.darkAccent,
-                    ),
+                    const DividerBox(),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: AccountListView(),
                     ),
-                    Container(
-                      height: 10,
-                      width: double.infinity,
-                      color: MyColors.darkAccent,
-                    ),
+                    const DividerBox(),
                     const SizedBox(height: 10),
                   ],
                 ),

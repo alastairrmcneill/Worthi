@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/support/theme.dart';
 
-class TimelineChart extends StatelessWidget {
-  const TimelineChart({super.key});
+// Dark box to divide widgets
+class DividerBox extends StatelessWidget {
+  const DividerBox({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: MyColors.redAccent,
-      height: 400,
+      height: 10,
       width: double.infinity,
+      color: MyColors.darkAccent,
     );
   }
 }

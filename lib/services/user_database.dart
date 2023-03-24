@@ -12,6 +12,7 @@ class UserDatabase {
 
   // Create user
   static Future create(BuildContext context, {required AppUser appUser}) async {
+    // Write user to database
     try {
       DocumentReference ref = _usersRef.doc(appUser.id!);
       await ref.set(appUser.toJSON());
@@ -25,8 +26,10 @@ class UserDatabase {
     final User? user = Provider.of<User?>(context, listen: false);
     UserNotifier userNotifier = Provider.of<UserNotifier>(context, listen: false);
 
+    // Check if user is lgoged in, return if not
     if (user == null) return;
 
+    // Read the current user from database, convert to User model and add to provider
     try {
       DocumentReference ref = _usersRef.doc(user.uid);
       DocumentSnapshot snapshot = await ref.get();
@@ -44,27 +47,9 @@ class UserDatabase {
     }
   }
 
-  // Read specfific user
-  static Future<AppUser?> getSpecificUser(BuildContext context, {required String id}) async {
-    AppUser? user;
-    try {
-      DocumentReference ref = _usersRef.doc(id);
-      DocumentSnapshot snapshot = await ref.get();
-
-      // Create app user
-      if (snapshot.exists) {
-        Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
-        AppUser user = AppUser.fromJSON(data);
-        return user;
-      }
-    } on FirebaseException catch (error) {
-      showErrorDialog(context, error.message!);
-    }
-    return null;
-  }
-
   // Update user
   static Future updateUser(BuildContext context, {required AppUser newAppUser}) async {
+    // Update the user information in the firebase database
     try {
       DocumentReference ref = _usersRef.doc(newAppUser.id);
       await ref.update(newAppUser.toJSON());
@@ -77,7 +62,7 @@ class UserDatabase {
   // Delete user
   static Future deleteUser(BuildContext context, {required String id}) async {
     try {
-      // Read database
+      // Read database to get reference
       DocumentReference ref = _usersRef.doc(id);
       await ref.delete();
     } on FirebaseException catch (error) {

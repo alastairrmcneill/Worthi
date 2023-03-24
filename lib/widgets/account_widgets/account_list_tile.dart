@@ -7,14 +7,17 @@ import 'package:moolah/screens/screens.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'package:showcaseview/showcaseview.dart';
 
+// Tile for showing the account on the home screen
 class AccountListTile extends StatelessWidget {
   final Account account;
   const AccountListTile({super.key, required this.account});
 
+  // Find the string to show in the returns
   String _buildReturns() {
     final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
+
+    // Only show returns if an investment account
     if (account.type != AccountTypes.investment) return "0.00";
 
     double totalDepostied = account.history.first[AccountFields.deposited] as double;
@@ -40,6 +43,7 @@ class AccountListTile extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+        // If you click this tile navigate to the details page
         accountNotifier.setCurrentAccount = account;
         Navigator.push(context, MaterialPageRoute(builder: (_) => const AccountDetailScreen()));
       },
@@ -56,8 +60,9 @@ class AccountListTile extends StatelessWidget {
               width: 50,
               decoration: BoxDecoration(
                 color: MyColors.accountColors[account.type],
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
+              // Show icon for account type
               child: Image.asset(
                 "lib/icons/${account.type.toLowerCase()}.png",
                 color: MyColors.accountAccentColors[account.type],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Show the loading icon overlay
 showCircularProgressOverlay(BuildContext context) {
   showDialog(
     context: context,
@@ -8,6 +9,7 @@ showCircularProgressOverlay(BuildContext context) {
   );
 }
 
+// Stop showing the loading icon overlay
 stopCircularProgressOverlay(BuildContext context) {
   Navigator.of(context, rootNavigator: true).pop();
 }

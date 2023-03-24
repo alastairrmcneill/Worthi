@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'package:moolah/models/models.dart';
 import 'package:moolah/services/account_database.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 
+// Dialog box to create a new account
 showAddAccountDialog(BuildContext context) {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _depositedController = TextEditingController();
@@ -16,6 +16,29 @@ showAddAccountDialog(BuildContext context) {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? _type = null;
   bool showDeposited = false;
+
+  // Submitting form, checking fields are filled in and triggering database create
+  Future _submitForm() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    _formKey.currentState!.save();
+    await AccountDatabase.create(
+      context,
+      account: Account(
+        name: _nameController.text.trim(),
+        type: _type!,
+        archived: false,
+        history: [
+          {
+            AccountFields.date: _date,
+            AccountFields.deposited: _type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
+            AccountFields.value: double.parse(_balanceController.text.trim()),
+          },
+        ],
+      ),
+    ).whenComplete(() => Navigator.pop(context));
+  }
 
   AlertDialog dialog = AlertDialog(
     scrollable: true,
@@ -108,25 +131,7 @@ showAddAccountDialog(BuildContext context) {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (!_formKey.currentState!.validate()) {
-                      return;
-                    }
-                    _formKey.currentState!.save();
-                    await AccountDatabase.create(
-                      context,
-                      account: Account(
-                        name: _nameController.text.trim(),
-                        type: _type!,
-                        archived: false,
-                        history: [
-                          {
-                            AccountFields.date: _date,
-                            AccountFields.deposited: _type == AccountTypes.investment ? double.parse(_depositedController.text.trim()) : null,
-                            AccountFields.value: double.parse(_balanceController.text.trim()),
-                          },
-                        ],
-                      ),
-                    ).whenComplete(() => Navigator.pop(context));
+                    await _submitForm();
                   },
                   child: const Text('Create'),
                 ),

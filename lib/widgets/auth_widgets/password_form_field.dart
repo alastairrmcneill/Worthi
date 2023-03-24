@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/support/theme.dart';
 
+// Custom password form field with validation included and visibility toggle
 class PasswordFormField extends StatefulWidget {
   final TextEditingController textEditingController;
   const PasswordFormField({Key? key, required this.textEditingController}) : super(key: key);

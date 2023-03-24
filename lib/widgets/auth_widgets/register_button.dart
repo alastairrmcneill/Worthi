@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:moolah/services/services.dart';
 
+// Button for the regsiter screen to trigger user database creation
 class RegisterButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;

@@ -5,11 +5,14 @@ import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+// Widget at the top fo the home screen
 class TotalValue extends StatelessWidget {
   TotalValue({super.key});
   final NumberFormat formatCurrency = NumberFormat.currency(symbol: '');
 
+  // Determine what to show in the total
   String _buildTotal(AccountNotifier accountNotifier, DisplayNotifier displayNotifier) {
+    // If there are no filters then return nothing
     if (accountNotifier.filteredAccounts == null) return "0.00";
 
     List<Account> accounts = accountNotifier.filteredAccounts!;
@@ -27,7 +30,9 @@ class TotalValue extends StatelessWidget {
     return formatCurrency.format(runningTotal);
   }
 
+  // Determine total that has been invested
   String _buildInvested(AccountNotifier accountNotifier, DisplayNotifier displayNotifier) {
+    // Return nothing if no acconuts selected that are investment accounts
     if (!accountNotifier.filter.contains(AccountTypes.investment) || accountNotifier.filter.length > 1) return "0.00";
     List<Account> accounts = accountNotifier.filteredAccounts!;
     double runningTotal = 0;
@@ -44,7 +49,9 @@ class TotalValue extends StatelessWidget {
     return formatCurrency.format(runningTotal);
   }
 
+  // Determine returns on what has been invested
   String _buildReturns(AccountNotifier accountNotifier, DisplayNotifier displayNotifier) {
+    // Return nothing if no investment accounts have been selected
     if (!accountNotifier.filter.contains(AccountTypes.investment) || accountNotifier.filter.length > 1) return "0.00";
     List<Account> accounts = accountNotifier.filteredAccounts!;
     double runningTotalDepostied = 0;
@@ -72,6 +79,7 @@ class TotalValue extends StatelessWidget {
     SettingsNotifier settingsNotifier = Provider.of<SettingsNotifier>(context);
     DisplayNotifier displayNotifier = Provider.of<DisplayNotifier>(context);
 
+    // Update information
     String total = _buildTotal(accountNotifier, displayNotifier);
     String invested = _buildInvested(accountNotifier, displayNotifier);
     String returns = _buildReturns(accountNotifier, displayNotifier);

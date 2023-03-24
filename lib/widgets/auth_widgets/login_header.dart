@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/support/theme.dart';
 
+// Widget for the top of the login screen with app name and icon
 class LoginHeader extends StatelessWidget {
   const LoginHeader({Key? key}) : super(key: key);
 

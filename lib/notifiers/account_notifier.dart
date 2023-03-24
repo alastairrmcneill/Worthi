@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/models/models.dart';
 
+// Provider notifier that manages the state of the accounts that are downloaded from database
 class AccountNotifier extends ChangeNotifier {
   List<Account>? _myAccounts;
   List<String> _filter = [];
@@ -18,17 +19,20 @@ class AccountNotifier extends ChangeNotifier {
   List<String> get filter => _filter;
   Account? get currentAccount => _currentAccount;
 
+  // Set the acconts downloaded from database
   set setMyAccounts(List<Account>? myAccounts) {
     _myAccounts = myAccounts;
     setFilter = _filter;
     notifyListeners();
   }
 
+  // Set a specific account that is needed for a widget
   set setCurrentAccount(Account? currentAccount) {
     _currentAccount = currentAccount;
     notifyListeners();
   }
 
+  // Set the account types to filter out from account list
   set setFilter(List<String> type) {
     _filter = type;
     if (_filter.isEmpty) {

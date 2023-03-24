@@ -3,11 +3,8 @@ import 'package:moolah/models/models.dart';
 import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/services/account_database.dart';
 import 'package:moolah/support/theme.dart';
-import 'package:moolah/support/wrapper.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
 
 class AccountDetailScreen extends StatefulWidget {
   const AccountDetailScreen({super.key});
@@ -20,6 +17,8 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
   @override
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context, listen: true);
+
+    // If there isn't a specific acocunt selected the show loading icon.
     if (accountNotifier.currentAccount == null) return const Center(child: CircularProgressIndicator());
 
     Account account = accountNotifier.currentAccount!;
@@ -40,7 +39,6 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                 // Archive/Restore
                 Account newAccount = account.copy(archived: !account.archived);
                 await AccountDatabase.updateAccount(context, newAccount: newAccount);
-                // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Wrapper()), (_) => false);
               } else if (value == MenuItems.item3) {
                 // Delete
                 showTwoButtonDialog(
@@ -82,19 +80,14 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const AccountSummary(),
-                    Container(
-                      height: 10,
-                      width: double.infinity,
-                      color: MyColors.darkAccent,
+                  children: const [
+                    AccountSummary(),
+                    DividerBox(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: AccountHistoryListView(),
                     ),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: AccountHistoryListView()),
-                    Container(
-                      height: 10,
-                      width: double.infinity,
-                      color: MyColors.darkAccent,
-                    ),
+                    DividerBox(),
                   ],
                 ),
               ),
@@ -104,6 +97,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
               width: MediaQuery.of(context).size.width * .6,
               child: ElevatedButton(
                 onPressed: () {
+                  // Show pop up to add historical entry to account
                   showAddEntryDialog(context, account);
                 },
                 child: const Text('Add Entry'),

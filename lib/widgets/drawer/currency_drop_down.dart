@@ -3,6 +3,7 @@ import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:provider/provider.dart';
 
+// Dropdown list that sets the provider notifier currency for use across the app
 class CurrencyDropDown extends StatelessWidget {
   const CurrencyDropDown({super.key});
 
@@ -39,6 +40,7 @@ class CurrencyDropDown extends StatelessWidget {
   }
 }
 
+// Currency list that can be updated later
 List<String> currencyList = [
   '₡',
   '€',

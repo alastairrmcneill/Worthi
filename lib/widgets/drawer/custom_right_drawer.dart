@@ -4,6 +4,7 @@ import 'package:moolah/services/services.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 
+// Drawer that expands on the right hand side of the screnen
 class CustomRightDrawer extends StatelessWidget {
   const CustomRightDrawer({super.key});
 
@@ -17,6 +18,7 @@ class CustomRightDrawer extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 10),
+              // Currency drop down
               Row(
                 children: const [
                   Text(
@@ -29,6 +31,7 @@ class CustomRightDrawer extends StatelessWidget {
               const SizedBox(height: 10),
               const Divider(),
               const SizedBox(height: 10),
+              // Archived accounts
               ListTile(
                 contentPadding: EdgeInsets.all(0),
                 title: const Text(
@@ -48,6 +51,8 @@ class CustomRightDrawer extends StatelessWidget {
               const SizedBox(height: 10),
               const Divider(),
               const SizedBox(height: 20),
+
+              // Sign out button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -58,6 +63,8 @@ class CustomRightDrawer extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
+
+              // Delete account button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

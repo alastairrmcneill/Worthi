@@ -1,16 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:moolah/widgets/widgets.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
-
-  @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
-
-class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();

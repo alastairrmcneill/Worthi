@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:moolah/support/theme.dart';
 
-class CustomTextInput extends StatelessWidget {
+// Custom email form field with validation included
+class EmailFormField extends StatelessWidget {
   final TextEditingController textEditingController;
-  final String? labelText;
-  CustomTextInput({super.key, required this.textEditingController, this.labelText});
+  const EmailFormField({Key? key, required this.textEditingController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      decoration: InputDecoration(
-        labelText: labelText ?? '',
+      style: const TextStyle(color: MyColors.background),
+      decoration: const InputDecoration(
+        labelText: 'Email',
         prefixIcon: Icon(Icons.email_outlined),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
       ),
       textInputAction: TextInputAction.next,
       maxLines: 1,
@@ -29,7 +30,7 @@ class CustomTextInput extends StatelessWidget {
         }
       },
       onSaved: (value) {
-        textEditingController.text = value!;
+        textEditingController.text = value!.trim();
       },
     );
   }

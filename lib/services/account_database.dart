@@ -12,12 +12,14 @@ class AccountDatabase {
 
   // Create account
   static Future create(BuildContext context, {required Account account}) async {
+    // Check there is a logged in user
     String? userId = AuthService.userId;
     if (userId == null) {
       showErrorDialog(context, "Error: Logout and log back in to reset");
-      return;
+      return; // Return if not
     }
 
+    // Add account to database
     try {
       showCircularProgressOverlay(context);
       final DocumentReference ref = _usersRef.doc(userId).collection('accounts').doc();
@@ -27,7 +29,7 @@ class AccountDatabase {
       Account encryptedAccount = newAccount.encryptData();
 
       await ref.set(encryptedAccount.toJSON());
-      await readAllAccounts(context);
+      await readAllAccounts(context); // Read all the accounts for this user
       stopCircularProgressOverlay(context);
       showSnackBar(context, 'Account added.');
     } on FirebaseException catch (error) {
@@ -41,12 +43,14 @@ class AccountDatabase {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context, listen: false);
     Account? account;
 
+    // Check user logged in
     String? userId = AuthService.userId;
     if (userId == null) {
       showErrorDialog(context, "Error: Logout and log back in to reset");
-      return;
+      return; // Return if not
     }
 
+    // Read a specific account from the database based on id
     try {
       DocumentReference ref = _usersRef.doc(userId).collection('accounts').doc(id);
 
@@ -63,14 +67,16 @@ class AccountDatabase {
   // Read all accounts
   static Future readAllAccounts(BuildContext context) async {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context, listen: false);
-
     List<Account> accountsList = [];
+
+    // Check user logged in
     String? userId = AuthService.userId;
     if (userId == null) {
       showErrorDialog(context, "Error: Logout and log back in to reset");
-      return;
+      return; // Return if not
     }
 
+    // Read all the accounts for this user
     try {
       Query ref = _usersRef.doc(userId).collection('accounts').orderBy(AccountFields.name, descending: false);
 
@@ -88,11 +94,14 @@ class AccountDatabase {
 
   // Update account
   static Future updateAccount(BuildContext context, {required Account newAccount}) async {
+    // Check user logged in
     String? userId = AuthService.userId;
     if (userId == null) {
       showErrorDialog(context, "Error: Logout and log back in to reset");
-      return;
+      return; // Return if not
     }
+
+    // Update the specific account that was passed in
     try {
       DocumentReference ref = _usersRef.doc(userId).collection('accounts').doc(newAccount.id!);
 
@@ -108,11 +117,14 @@ class AccountDatabase {
 
   // Delete account
   static Future deleteAccount(BuildContext context, {required String id}) async {
+    // Check user logged in
     String? userId = AuthService.userId;
     if (userId == null) {
       showErrorDialog(context, "Error: Logout and log back in to reset");
-      return;
+      return; // If not then return
     }
+
+    // Delete account based on id of account
     try {
       DocumentReference ref = _usersRef.doc(userId).collection('accounts').doc(id);
       await ref.delete();

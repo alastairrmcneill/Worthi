@@ -4,6 +4,7 @@ import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
+// List view of all the accounts that this user has
 class AccountListView extends StatelessWidget {
   const AccountListView({super.key});
 
@@ -29,9 +30,12 @@ class AccountListView extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           accountNotifier.filteredNotArchivedAccounts == null
+              // If database hasn't loaded then show loading icon
               ? const SizedBox(height: 50, child: Center(child: CircularProgressIndicator()))
               : accountNotifier.filteredNotArchivedAccounts!.isEmpty
+                  // Show message if list is empty
                   ? const SizedBox(height: 50, child: Center(child: Text('No accounts.')))
+                  // Otherwise show list of account tiles
                   : Column(
                       children: [
                         ...accountNotifier.filteredNotArchivedAccounts!

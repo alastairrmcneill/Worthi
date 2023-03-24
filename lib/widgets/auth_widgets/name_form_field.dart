@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moolah/support/theme.dart';
 
+// Custom name form field with validation included
 class NameFormField extends StatelessWidget {
   final TextEditingController textEditingController;
   const NameFormField({Key? key, required this.textEditingController}) : super(key: key);

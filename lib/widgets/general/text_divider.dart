@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Divider with text in the middle
 class TextDivider extends StatelessWidget {
   final String text;
   const TextDivider({Key? key, required this.text}) : super(key: key);

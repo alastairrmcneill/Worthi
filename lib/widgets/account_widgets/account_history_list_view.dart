@@ -3,23 +3,19 @@ import 'package:moolah/notifiers/notifiers.dart';
 import 'package:moolah/support/theme.dart';
 import 'package:moolah/widgets/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
 
-class AccountHistoryListView extends StatefulWidget {
+// List of historical entries for the account
+class AccountHistoryListView extends StatelessWidget {
   const AccountHistoryListView({super.key});
 
-  @override
-  State<AccountHistoryListView> createState() => _AccountHistoryListViewState();
-}
-
-class _AccountHistoryListViewState extends State<AccountHistoryListView> {
   @override
   Widget build(BuildContext context) {
     AccountNotifier accountNotifier = Provider.of<AccountNotifier>(context);
 
+    // If there isn't an account selected then show loading icon
     if (accountNotifier.currentAccount == null) return const Center(child: CircularProgressIndicator());
 
+    // Show a list view of the history tiles
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -7,9 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' as sf;
 
+// Chart with total value of accounts over time
 class Chart extends StatelessWidget {
   const Chart({super.key});
 
+  // Get the data from provider and format for chart type
   Map<String, Object>? _buildChartData(AccountNotifier accountNotifier) {
     final List<ChartData> chartValueData = [];
     final List<ChartData> chartDepositData = [];
@@ -21,9 +23,12 @@ class Chart extends StatelessWidget {
     DateTime? endDate;
     DateTime? startDate;
 
+    // Loop through accounts to pull out history
     for (var account in accounts) {
       accountsHistory.add(account.history as List<dynamic>);
     }
+
+    // Loop through the account histories to get the correct starting date
     for (var i = 0; i < accountsHistory.length; i++) {
       var account = accountsHistory[i];
       if (account.isEmpty) continue;
@@ -47,6 +52,7 @@ class Chart extends StatelessWidget {
 
     DateTime loopStartDate = startDate ?? DateTime.now();
 
+    // Build up list of dates for x-axis
     while (!loopStartDate.isAfter(endDate ?? DateTime.now())) {
       dates.add(DateTime(loopStartDate.year, loopStartDate.month));
       loopStartDate = DateTime(loopStartDate.year, loopStartDate.month + 1);
@@ -56,6 +62,7 @@ class Chart extends StatelessWidget {
     startDate = startDate ?? DateTime.now();
     endDate = DateTime.now();
 
+    // Determine the x-axis type
     if (dates.length < 3) {
       final daysToGenerate = (endDate).difference(startDate).inDays + 1;
 
@@ -76,6 +83,7 @@ class Chart extends StatelessWidget {
       interval = 1;
     }
 
+    // Find value in history at a specific date
     double findAmountAtDate(DateTime requestDate, String accountField) {
       double runningTotal = 0;
 
@@ -91,6 +99,7 @@ class Chart extends StatelessWidget {
       return runningTotal;
     }
 
+    // Loop through all the dates and sum up all the account values
     for (var i = 0; i < dates.length; i++) {
       var date = dates[i];
       var value = findAmountAtDate(date, AccountFields.value);
@@ -126,21 +135,24 @@ class Chart extends StatelessWidget {
           ? accountNotifier.filteredAccounts!.isNotEmpty
               ? Center(
                   child: sf.SfCartesianChart(
+                    // Allow panning of chart
                     zoomPanBehavior: sf.ZoomPanBehavior(
                       enablePinching: true,
                       enablePanning: true,
                     ),
+                    // Allow click to see extra detail
                     trackballBehavior: sf.TrackballBehavior(
                       enable: true,
                       activationMode: sf.ActivationMode.singleTap,
                     ),
+                    // Check where you click and update the value widget
                     onTrackballPositionChanging: (sf.TrackballArgs args) {
                       sf.ChartSeries<dynamic, dynamic> series = args.chartPointInfo.series as sf.ChartSeries;
                       if (series.runtimeType.toString().toLowerCase().contains('area')) {
                         args.chartPointInfo.header = '';
                         args.chartPointInfo.label = '';
                       }
-
+                      // Update the provider for the value widget
                       if (series.name == 'Value') {
                         displayNotifier.setValue = (chartData?["chartValueData"] as List<ChartData>)[args.chartPointInfo.dataPointIndex ?? 0].y;
                       }
@@ -148,21 +160,27 @@ class Chart extends StatelessWidget {
                         displayNotifier.setDeposited = (chartData?["chartDepositData"] as List<ChartData>)[args.chartPointInfo.dataPointIndex ?? 0].y;
                       }
                     },
+                    // When you touch the graph set the widget to show the value of the graph
                     onChartTouchInteractionDown: (tapArgs) {
                       displayNotifier.setShowFromGraph = true;
                     },
+                    // When you release set the widget to show the current total
                     onChartTouchInteractionUp: (tapArgs) {
                       displayNotifier.setShowFromGraph = false;
                     },
+                    // If you are zooming make sure it doesn't get counted as a touch
                     onZoomStart: (zoomingArgs) {
                       displayNotifier.setShowFromGraph = false;
                     },
                     plotAreaBorderWidth: 0,
                     margin: const EdgeInsets.only(left: 0, right: 10),
+                    // Legend only showing info if investment acconut selected
                     legend: sf.Legend(
-                        isVisible: (accountNotifier.filter.length == 1 && accountNotifier.filter.contains(AccountTypes.investment)),
-                        textStyle: const TextStyle(color: MyColors.lightAccent),
-                        position: sf.LegendPosition.top),
+                      isVisible: (accountNotifier.filter.length == 1 && accountNotifier.filter.contains(AccountTypes.investment)),
+                      textStyle: const TextStyle(color: MyColors.lightAccent),
+                      position: sf.LegendPosition.top,
+                    ),
+                    // X axis with the right type of axis type
                     primaryXAxis: sf.DateTimeAxis(
                       borderColor: MyColors.lightAccent,
                       labelStyle: const TextStyle(color: MyColors.lightAccent),
@@ -171,13 +189,16 @@ class Chart extends StatelessWidget {
                       intervalType: chartData?["intervalType"] as sf.DateTimeIntervalType? ?? sf.DateTimeIntervalType.auto,
                       enableAutoIntervalOnZooming: true,
                     ),
+                    // Y axis with the right number formatting
                     primaryYAxis: sf.NumericAxis(
                       borderColor: MyColors.lightAccent,
                       labelStyle: const TextStyle(color: MyColors.lightAccent),
                       numberFormat: NumberFormat.compact(),
                       majorGridLines: const sf.MajorGridLines(width: 0),
                     ),
+                    // Data for chart
                     series: <sf.ChartSeries<ChartData, DateTime>>[
+                      // Value of accounts
                       sf.SplineSeries<ChartData, DateTime>(
                         name: 'Value',
                         dataSource: _buildChartData(accountNotifier)?["chartValueData"] as List<ChartData>? ?? [],
@@ -187,6 +208,7 @@ class Chart extends StatelessWidget {
                         animationDuration: 400,
                         splineType: splineType,
                       ),
+                      // Area under the line for the value of the accounts
                       sf.SplineAreaSeries<ChartData, DateTime>(
                         name: 'Value area',
                         isVisibleInLegend: false,
@@ -198,6 +220,7 @@ class Chart extends StatelessWidget {
                         opacity: 0.05,
                         splineType: splineType,
                       ),
+                      // Deposited line if the investment option is selected
                       sf.SplineSeries<ChartData, DateTime>(
                         name: 'Deposited',
                         dataSource: _buildChartData(accountNotifier)?["chartDepositData"] as List<ChartData>? ?? [],
@@ -214,6 +237,7 @@ class Chart extends StatelessWidget {
                   ),
                 )
               : Center(
+                  // Show empty chart if no data
                   child: sf.SfCartesianChart(
                     plotAreaBorderWidth: 0,
                     primaryXAxis: sf.DateTimeAxis(
@@ -237,7 +261,7 @@ class Chart extends StatelessWidget {
                     ),
                   ),
                 )
-          : const Center(child: CircularProgressIndicator()),
+          : const Center(child: CircularProgressIndicator()), // If no data then show loading
     );
   }
 }

@@ -23,9 +23,9 @@ class ArchivedAccountsScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: accountNotifier.archivedAccounts == null
-              ? const SizedBox(height: 50, child: Center(child: CircularProgressIndicator()))
+              ? const SizedBox(height: 50, child: Center(child: CircularProgressIndicator())) // Show loading if the database hasn't loaded yet
               : accountNotifier.archivedAccounts!.isEmpty
-                  ? const SizedBox(height: 50, child: Center(child: Text('No accounts.')))
+                  ? const SizedBox(height: 50, child: Center(child: Text('No accounts.'))) // Show message if this secion is empty
                   : Column(
                       children: [
                         ...accountNotifier.archivedAccounts!
